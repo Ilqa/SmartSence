@@ -8,7 +8,7 @@ namespace SmartSence.Services
     public interface IDeviceService
     {
         
-        Task<IResult> AddDevice(OrganizationDto company);
+        Task<IResult> AddDevice(DeviceDto device);
        
     }
 }

@@ -14,7 +14,7 @@ namespace SmartSence.Controllers
 
         private readonly ILogger<OrganizationController> _logger;
 
-        public OrganizationController(ILogger<OrganizationController> logger, IDeviceService orgService)
+        public OrganizationController(ILogger<OrganizationController> logger, IOrganizationService orgService)
         {
             _orgService = orgService;
         }
