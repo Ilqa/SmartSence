@@ -57,6 +57,11 @@ namespace SmartSence.Database.Repositories
             return await _dbContext.Set<T>().FindAsync(id);
         }
 
+        public async Task<T> GetByIdAsync(long id)
+        {
+            return await _dbContext.Set<T>().FindAsync(id);
+        }
+
         public Task UpdateAsync(T entity)
         {
             _dbContext.Entry(entity).CurrentValues.SetValues(entity);

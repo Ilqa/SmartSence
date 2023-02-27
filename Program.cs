@@ -1,9 +1,12 @@
+using JobHunt.Database.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SmartSence.Database.Entities;
+using SmartSence.Database.Repositories;
 using SmartSence.Databse.Entities;
+using SmartSence.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +23,14 @@ options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnectionSt
 builder.Services.AddIdentity<User, UserRole>()
     .AddEntityFrameworkStores<SmartSenceContext>()
     .AddDefaultTokenProviders();
+
+
+// Register interface and classes
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IOrganizationService, OrganizationService>();
+builder.Services.AddScoped<IDeviceService, DeviceService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddTransient(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
 
 // Adding Authentication
 builder.Services.AddAuthentication(options =>

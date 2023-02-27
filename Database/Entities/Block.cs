@@ -25,5 +25,6 @@ public partial class Block
 
     public virtual ICollection<House> Houses { get; } = new List<House>();
 
+   
     public virtual Sector Sector { get; set; } = null!;
 }

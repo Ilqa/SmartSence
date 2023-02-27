@@ -11,6 +11,8 @@ namespace SmartSence.Database.Repositories
 
         Task<T> GetByIdAsync(int id);
 
+        Task<T> GetByIdAsync(long id);
+
         Task<List<T>> GetAllAsync();
 
         Task<T> AddAsync(T entity);

@@ -12,20 +12,12 @@ namespace SmartSence.Services
     public class DeviceService : IDeviceService
     {
         private readonly IMapper _mapper;
-        
-        private readonly IOrganizationRepository _organizationRepository;
-        private readonly RoleManager<UserRole> _roleManager;
-       
         private readonly IUnitOfWork _unitOfWork;
 
 
-        public DeviceService(IOrganizationRepository companyRepository, RoleManager<UserRole> roleManager, IMapper mapper, IUnitOfWork unitOfWork)
+        public DeviceService( IMapper mapper, IUnitOfWork unitOfWork)
         {
-           
-            _organizationRepository = companyRepository;
             _mapper = mapper;
-            _roleManager = roleManager;
-           
             _unitOfWork = unitOfWork;
         }
 
