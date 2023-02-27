@@ -8,17 +8,26 @@ namespace SmartSence.Controllers
     [Route("[controller]")]
     public class DeviceController : ControllerBase
     {
-        private readonly IDeviceService _orgService;
+        private readonly IDeviceService _deviceService;
 
         private readonly ILogger<OrganizationController> _logger;
 
-        public DeviceController(ILogger<OrganizationController> logger, IDeviceService orgService)
+        public DeviceController(ILogger<OrganizationController> logger, IDeviceService deviceService)
         {
-            _orgService = orgService;
+            _deviceService = deviceService;
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> AddDevice(DeviceDto org) => Ok(await _orgService.AddDevice(org));
+        public async Task<IActionResult> AddDevice(DeviceDto device) => Ok(await _deviceService.AddDevice(device));
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateDevice(DeviceDto device) => Ok(await _deviceService.AddDevice(device));
+
+        [HttpGet("ByOrganization/{id}")]
+        public async Task<IActionResult> GetDevices(long orgId) => Ok(await _deviceService.GetDevicesByOrganization(orgId));
+
+        [HttpGet("ByHouse/{id}")]
+        public async Task<IActionResult> GetDevicesByHouseId(long houseId) => Ok(await _deviceService.GetDevicesByHouse(houseId));
     }
 }

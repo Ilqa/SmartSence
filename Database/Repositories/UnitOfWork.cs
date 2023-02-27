@@ -1,5 +1,5 @@
-﻿using SmartSence.Database.Repositories;
-using SmartSence.Databse.Entities;
+﻿using SmartSence.Database;
+using SmartSence.Database.Repositories;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

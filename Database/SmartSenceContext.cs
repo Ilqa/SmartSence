@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SmartSence.Database.Entities;
+using SmartSence.Databse.Entities;
 
-namespace SmartSence.Databse.Entities;
+namespace SmartSence.Database;
 
 public partial class SmartSenceContext : IdentityDbContext<User, UserRole, long>
 {
@@ -23,6 +24,7 @@ public partial class SmartSenceContext : IdentityDbContext<User, UserRole, long>
 
     public virtual DbSet<DeviceTelemetry> DeviceTelemetries { get; set; }
 
+    public virtual DbSet<DeviceTelemetryJson> DeviceTelemetryJsons { get; set; }
     public virtual DbSet<House> Houses { get; set; }
 
     public virtual DbSet<Organization> Organizations { get; set; }

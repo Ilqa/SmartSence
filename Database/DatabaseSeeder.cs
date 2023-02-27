@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using SmartSence.Database.Entities;
-using SmartSence.Databse.Entities;
 
 namespace SmartSence.Database
 {

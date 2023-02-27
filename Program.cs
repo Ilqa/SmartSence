@@ -7,7 +7,6 @@ using Microsoft.IdentityModel.Tokens;
 using SmartSence.Database;
 using SmartSence.Database.Entities;
 using SmartSence.Database.Repositories;
-using SmartSence.Databse.Entities;
 using SmartSence.Services;
 using System.Text;
 

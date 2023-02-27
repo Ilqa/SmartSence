@@ -13,8 +13,8 @@ using SmartSence.Database;
 namespace SmartSence.Migrations
 {
     [DbContext(typeof(SmartSenceContext))]
-    [Migration("20230227125640_OrgIdNullInUser")]
-    partial class OrgIdNullInUser
+    [Migration("20230227133633_DeviceTelemetryJson")]
+    partial class DeviceTelemetryJson
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -127,6 +127,26 @@ namespace SmartSence.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("SmartSence.Database.Entities.DeviceTelemetryJson", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("DeviceId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("MsqJson")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DeviceTelemetryJsons");
                 });
 
             modelBuilder.Entity("SmartSence.Database.Entities.User", b =>
