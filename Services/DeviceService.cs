@@ -13,6 +13,7 @@ namespace SmartSence.Services
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        
 
 
         public DeviceService( IMapper mapper, IUnitOfWork unitOfWork)
@@ -26,5 +27,19 @@ namespace SmartSence.Services
             throw new NotImplementedException();
         }
 
+        public Task<Wrappers.IResult> DeleteDevice(DeviceDto device)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Wrappers.IResult> SaveDeviceTelemetry(int deviveId, JsonContent content)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Wrappers.IResult> UpdateDevice(DeviceDto device)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

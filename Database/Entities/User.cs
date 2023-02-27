@@ -9,9 +9,9 @@ namespace SmartSence.Database.Entities
     public class User : IdentityUser<long>
     {
         [ForeignKey("OrganizationId")]
-        public Organization Organization { get; set; }
+        public Organization? Organization { get; set; }
 
-        public long OrganizationId { get; set; }
+        public long? OrganizationId { get; set; }
         public bool IsActive { get; set; }
 
 

@@ -7,8 +7,7 @@ using IResult = SmartSence.Wrappers.IResult;
 namespace SmartSence.Services
 {
     public interface IOrganizationService
-    {    
-        
+    {            
         Task<IResult> AddOrganization(OrganizationDto company);
         Task<IResult> UpdateOrganization(OrganizationDto company);
         Task<IResult> DeleteOrganization(long id);

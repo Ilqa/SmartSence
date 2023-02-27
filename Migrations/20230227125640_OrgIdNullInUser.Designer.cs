@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SmartSence.Databse.Entities;
@@ -12,9 +13,11 @@ using SmartSence.Databse.Entities;
 namespace SmartSence.Migrations
 {
     [DbContext(typeof(SmartSenceContext))]
-    partial class SmartSenceContextModelSnapshot : ModelSnapshot
+    [Migration("20230227125640_OrgIdNullInUser")]
+    partial class OrgIdNullInUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

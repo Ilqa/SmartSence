@@ -4,11 +4,11 @@ using SmartSence.DTO;
 
 namespace JobHunt.Mappings
 {
-    public class SectorPofile : Profile
+    public class BlockProfile : Profile
     {
-        public SectorPofile()
+        public BlockProfile()
         {
-            CreateMap<SectorDto, Sector>().ReverseMap();
+            CreateMap<BlockDto, Block>().ReverseMap();
         }
     }
 }
