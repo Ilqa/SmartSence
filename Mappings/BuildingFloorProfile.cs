@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using SmartSence.Databse.Entities;
+using SmartSence.Database.Entities;
 using SmartSence.DTO;
 
 namespace JobHunt.Mappings
 {
-    public class HouseProfile : Profile
+    public class BuildingFloorProfile : Profile
     {
-        public HouseProfile()
+        public BuildingFloorProfile()
         {
-            CreateMap<BuildingDto, Building>().ReverseMap();
+            CreateMap<BuildingFloor, BuildingFloorDto>().ReverseMap();
         }
     }
 }
