@@ -1,13 +1,10 @@
 ﻿using AutoMapper;
 //using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SmartSence.Database.Entities;
 using SmartSence.Database.Repositories;
 using SmartSence.Databse.Entities;
 using SmartSence.DTO;
 using SmartSence.Wrappers;
-using System.Security.Cryptography;
 
 namespace SmartSence.Services
 {
@@ -40,7 +37,7 @@ namespace SmartSence.Services
 
         public async Task<Result<List<DeviceDto>>> GetDevicesByHouse(long id)
         {
-            var devices = await _repositoryAsync.Entities.Where(s => s.Houseid == id).ToListAsync();
+            var devices = await _repositoryAsync.Entities.Where(s => s.BuildingFloor.BuildingId == id).ToListAsync();
             return await Result<List<DeviceDto>>.SuccessAsync(_mapper.Map<List<DeviceDto>>(devices));
         }
 

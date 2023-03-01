@@ -69,11 +69,13 @@ namespace SmartSence.Services
             return result;
         }
 
-        public async Task<PaginatedResult<UserDto>> GetAllAsync(int pageNumber, int pageSize, string sortField, string sortOrder, string searchText)
+        public async Task<PaginatedResult<UserDto>> GetAllAsync(int pageNumber, int pageSize, string sortField, string sortOrder, string searchText, long? orgId)
         {
-            var filteredUsers = searchText.IsNullOrEmpty()
-                ? _userManager.Users
-                : _userManager.Users.Where(p => p.UserName.Contains(searchText));
+
+            var filteredUsers = orgId.HasValue ? _userManager.Users.Where(p => p.OrganizationId == orgId.Value) : _userManager.Users;
+            filteredUsers =  searchText.IsNullOrEmpty()
+                ? filteredUsers
+                : filteredUsers.Where(p => p.UserName.Contains(searchText));
 
             var sortedUsers = filteredUsers.OrderBy($"{sortField} {sortOrder}");
             var userResponses = sortedUsers.Select(l => _mapper.Map<UserDto>(l)).ToPaginatedListAsync(pageNumber, pageSize);

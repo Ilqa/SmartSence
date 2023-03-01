@@ -19,9 +19,9 @@ namespace JobHunt.Controllers.Identity
 
         //[Authorize(Policy = Permissions.Users.View)]
         [HttpGet]
-        public async Task<IActionResult> GetAll(int? pageNumber, int? pageSize, string sortField, string sortOrder, string searchText)
+        public async Task<IActionResult> GetAll(int? pageNumber, int? pageSize, string sortField, string sortOrder, string searchText, long? orgId)
         {
-            return Ok(await _userService.GetAllAsync(pageNumber ?? 1, pageSize ?? 10, sortField ?? "UserName", sortOrder ?? "ASC", searchText ?? ""));
+            return Ok(await _userService.GetAllAsync(pageNumber ?? 1, pageSize ?? 10, sortField ?? "UserName", sortOrder ?? "ASC", searchText ?? "", orgId));
         }
 
         [HttpPost("Login")]

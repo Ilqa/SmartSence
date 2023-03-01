@@ -8,7 +8,7 @@ namespace JobHunt.Mappings
     {
         public HouseProfile()
         {
-            CreateMap<HouseDto, House>().ReverseMap();
+            CreateMap<BuildingDto, Building>().ReverseMap();
         }
     }
 }

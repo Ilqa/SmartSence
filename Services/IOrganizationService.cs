@@ -20,10 +20,16 @@ namespace SmartSence.Services
         Task<IResult> UpdateBlock(BlockDto block);
         Task<IResult> DeleteBlock(long id);
         Task<Result<List<BlockDto>>> GetAllBlocks(long sectorId);
-        Task<IResult> AddHouse(HouseDto house);
-        Task<IResult> UpdateHouse(HouseDto house);
-        Task<IResult> DeleteHouse (long id);
-        Task<Result<List<HouseDto>>> GetAllHouses(long blockId);
+        Task<IResult> AddBuilding(BuildingDto building);
+        Task<IResult> UpdateBuilding(BuildingDto building);
+        Task<IResult> DeleteBuilding (long id);
+        Task<Result<List<BuildingDto>>> GetAllBuildings(long blockId);
+
+
+        Task<IResult> AddBuildingFloor(BuildingFloorDto floor);
+        Task<IResult> UpdateBuildingFloor(BuildingFloorDto floor);
+        Task<IResult> DeleteBuildingFloor(long id);
+        Task<Result<List<BuildingDto>>> GetAllBuildingFloors(long floorId);
 
     }
 }

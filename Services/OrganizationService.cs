@@ -16,12 +16,13 @@ namespace SmartSence.Services
         private readonly IRepositoryAsync<Organization> _organizationRepository;
         private readonly IRepositoryAsync<Sector> _sectorRepository;
         private readonly IRepositoryAsync<Block> _blockRepository;
-        private readonly IRepositoryAsync<House> _houseRepository;
-       
+        private readonly IRepositoryAsync<Building> _buildingRepository;
+        private readonly IRepositoryAsync<BuildingFloor> _buildingFloorRepository;
+
         private readonly IUnitOfWork _unitOfWork;
 
 
-        public OrganizationService(IRepositoryAsync<Organization> organizationRepository, IRepositoryAsync<House> houseRepository, IRepositoryAsync<Sector> sectorRepository, IRepositoryAsync<Block> blockRepository, IMapper mapper, IUnitOfWork unitOfWork)
+        public OrganizationService(IRepositoryAsync<Organization> organizationRepository, IRepositoryAsync<BuildingFloor> buildingFloorRepository, IRepositoryAsync<Building> houseRepository, IRepositoryAsync<Sector> sectorRepository, IRepositoryAsync<Block> blockRepository, IMapper mapper, IUnitOfWork unitOfWork)
         {
            
             _organizationRepository = organizationRepository;
@@ -29,7 +30,8 @@ namespace SmartSence.Services
             //_roleManager = roleManager;
             _sectorRepository = sectorRepository;
             _blockRepository = blockRepository;
-            _houseRepository = houseRepository;
+            _buildingRepository = houseRepository;
+            _buildingFloorRepository = buildingFloorRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -132,34 +134,64 @@ namespace SmartSence.Services
             return await Result<List<BlockDto>>.SuccessAsync(_mapper.Map<List<BlockDto>>(blocks));
         }
 
-        public async Task<Wrappers.IResult> AddHouse(HouseDto house)
+        public async Task<Wrappers.IResult> AddBuilding(BuildingDto building)
         {
-            await _houseRepository.AddAsync(_mapper.Map<House>(house));
+            await _buildingRepository.AddAsync(_mapper.Map<Building>(building));
             await _unitOfWork.Commit();
             return await Result.SuccessAsync("House Added Successfully");
         }
 
-        public async Task<Wrappers.IResult> UpdateHouse(HouseDto house)
+        public async Task<Wrappers.IResult> UpdateBuilding(BuildingDto building)
         {
-            var houseDb = await _houseRepository.Entities.FirstOrDefaultAsync(s => s.Id == house.Id);
+            var houseDb = await _buildingRepository.Entities.FirstOrDefaultAsync(s => s.Id == building.Id);
             if (houseDb == null)
                 return Result<long>.Fail($"House Not Found.");
 
-            houseDb = _mapper.Map(house, houseDb);
-            await _houseRepository.UpdateAsync(houseDb);
+            houseDb = _mapper.Map(building, houseDb);
+            await _buildingRepository.UpdateAsync(houseDb);
             await _unitOfWork.Commit();
             return Result<long>.Success(houseDb.Id, "House updated successfully");
         }
 
-        public Task<Wrappers.IResult> DeleteHouse(long id)
+        public Task<Wrappers.IResult> DeleteBuilding(long id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<List<HouseDto>>> GetAllHouses(long blockId)
+        public async Task<Result<List<BuildingDto>>> GetAllBuildings(long blockId)
         {
-            var house = await _houseRepository.Entities.Where(s => s.Blockid == blockId).ToListAsync();
-            return await Result<List<HouseDto>>.SuccessAsync(_mapper.Map<List<HouseDto>>(house));
+            var house = await _buildingRepository.Entities.Where(s => s.Blockid == blockId).ToListAsync();
+            return await Result<List<BuildingDto>>.SuccessAsync(_mapper.Map<List<BuildingDto>>(house));
+        }
+
+        public async Task<Wrappers.IResult> AddBuildingFloor(BuildingFloorDto floor)
+        {
+            await _buildingFloorRepository.AddAsync(_mapper.Map<BuildingFloor>(floor));
+            await _unitOfWork.Commit();
+            return await Result.SuccessAsync("Floor Added Successfully");
+        }
+
+        public async Task<Wrappers.IResult> UpdateBuildingFloor(BuildingFloorDto floor)
+        {
+            var floorDb = await _buildingFloorRepository.Entities.FirstOrDefaultAsync(s => s.Id == floor.Id);
+            if (floorDb == null)
+                return Result<long>.Fail($"Floor Not Found.");
+
+            floorDb = _mapper.Map(floor, floorDb);
+            await _buildingFloorRepository.UpdateAsync(floorDb);
+            await _unitOfWork.Commit();
+            return Result<long>.Success(floorDb.Id, "Floor updated successfully");
+        }
+
+        public async  Task<Wrappers.IResult> DeleteBuildingFloor(long id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async  Task<Result<List<BuildingFloorDto>>> GetAllBuildingFloors(long buildingId)
+        {
+            var buildingFloors = await _buildingFloorRepository.Entities.Where(s => s.BuildingId == buildingId).ToListAsync();
+            return await Result<List<BuildingFloorDto>>.SuccessAsync(_mapper.Map<List<BuildingFloorDto>>(buildingFloors));
         }
     }
 }

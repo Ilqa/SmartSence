@@ -1,6 +1,6 @@
 ﻿namespace SmartSence.DTO
 {
-    public class HouseDto
+    public class BuildingDto
     {
         public long Id { get; set; }
 
@@ -16,6 +16,5 @@
 
         public string Noofdevices { get; set; } = null!;
 
-        public long BlockId { get; set; }
     }
 }

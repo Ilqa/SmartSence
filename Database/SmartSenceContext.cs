@@ -25,7 +25,7 @@ public partial class SmartSenceContext : IdentityDbContext<User, UserRole, long>
     public virtual DbSet<DeviceTelemetry> DeviceTelemetries { get; set; }
 
     public virtual DbSet<DeviceTelemetryJson> DeviceTelemetryJsons { get; set; }
-    public virtual DbSet<House> Houses { get; set; }
+    public virtual DbSet<Building> Houses { get; set; }
 
     public virtual DbSet<Organization> Organizations { get; set; }
 
@@ -54,20 +54,11 @@ public partial class SmartSenceContext : IdentityDbContext<User, UserRole, long>
             entity.Property(e => e.Description)
                 .HasMaxLength(500)
                 .HasColumnName("description");
-            entity.Property(e => e.Logo)
-                .HasMaxLength(50)
-                .IsFixedLength()
-                .HasColumnName("logo");
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .IsFixedLength()
                 .HasColumnName("name");
-            entity.Property(e => e.Noofdevices)
-                .HasMaxLength(50)
-                .HasColumnName("noofdevices");
-            entity.Property(e => e.Noofgateways)
-                .HasMaxLength(50)
-                .HasColumnName("noofgateways");
+          
             entity.Property(e => e.Sectorid).HasColumnName("sectorid");
 
             entity.HasOne(d => d.Sector).WithMany(p => p.Blocks)
@@ -86,16 +77,14 @@ public partial class SmartSenceContext : IdentityDbContext<User, UserRole, long>
             entity.Property(e => e.Description)
                 .HasMaxLength(500)
                 .HasColumnName("description");
-            entity.Property(e => e.Deviceeui)
+            entity.Property(e => e.DeviceEUI)
                 .HasMaxLength(50)
                 .HasColumnName("deviceeui");
             entity.Property(e => e.Devicetype)
                 .HasMaxLength(50)
                 .HasColumnName("devicetype");
-            entity.Property(e => e.Houseid).HasColumnName("houseid");
-            entity.Property(e => e.Isactive)
-                .HasColumnType("bit(1)")
-                .HasColumnName("isactive");
+           
+         
             entity.Property(e => e.Manufacturer)
                 .HasMaxLength(50)
                 .HasColumnName("manufacturer");
@@ -108,9 +97,7 @@ public partial class SmartSenceContext : IdentityDbContext<User, UserRole, long>
                 .HasMaxLength(50)
                 .HasColumnName("serialnumber");
 
-            entity.HasOne(d => d.House).WithMany(p => p.DeviceInfos)
-                .HasForeignKey(d => d.Houseid)
-                .HasConstraintName("deviceinfo_houseid_fkey");
+          
 
             entity.HasOne(d => d.Org).WithMany(p => p.DeviceInfos)
                 .HasForeignKey(d => d.Orgid)
@@ -142,7 +129,7 @@ public partial class SmartSenceContext : IdentityDbContext<User, UserRole, long>
                 .HasConstraintName("device_telemetry_deviceid_fkey");
         });
 
-        modelBuilder.Entity<House>(entity =>
+        modelBuilder.Entity<Building>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("house_pkey");
 
@@ -153,9 +140,7 @@ public partial class SmartSenceContext : IdentityDbContext<User, UserRole, long>
                 .HasMaxLength(50)
                 .HasColumnName("address");
             entity.Property(e => e.Blockid).HasColumnName("blockid");
-            entity.Property(e => e.Coordinates)
-                .HasMaxLength(50)
-                .HasColumnName("coordinates");
+          
             entity.Property(e => e.Description)
                 .HasMaxLength(500)
                 .HasColumnName("description");
@@ -163,9 +148,7 @@ public partial class SmartSenceContext : IdentityDbContext<User, UserRole, long>
                 .HasMaxLength(50)
                 .IsFixedLength()
                 .HasColumnName("name");
-            entity.Property(e => e.Noofdevices)
-                .HasMaxLength(50)
-                .HasColumnName("noofdevices");
+         
 
             entity.HasOne(d => d.Block).WithMany(p => p.Houses)
                 .HasForeignKey(d => d.Blockid)
@@ -230,10 +213,7 @@ public partial class SmartSenceContext : IdentityDbContext<User, UserRole, long>
             entity.Property(e => e.Description)
                 .HasMaxLength(500)
                 .HasColumnName("description");
-            entity.Property(e => e.Logo)
-                .HasMaxLength(50)
-                .IsFixedLength()
-                .HasColumnName("logo");
+           
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .IsFixedLength()
@@ -241,12 +221,7 @@ public partial class SmartSenceContext : IdentityDbContext<User, UserRole, long>
             entity.Property(e => e.Networkdescription)
                 .HasMaxLength(500)
                 .HasColumnName("networkdescription");
-            entity.Property(e => e.Noofdevices)
-                .HasMaxLength(50)
-                .HasColumnName("noofdevices");
-            entity.Property(e => e.Noofgateways)
-                .HasMaxLength(50)
-                .HasColumnName("noofgateways");
+           
             entity.Property(e => e.Orgid).HasColumnName("orgid");
 
             entity.HasOne(d => d.Org).WithMany(p => p.Sectors)

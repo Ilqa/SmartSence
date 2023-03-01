@@ -46,13 +46,22 @@ namespace SmartSence.Controllers
         [HttpPut("Block")]
         public async Task<IActionResult> UpdateBlock(BlockDto block) => Ok(await _orgService.UpdateBlock(block));
 
-        [HttpGet("House/{id}")]
-        public async Task<IActionResult> GetAllHouses(long id) => Ok(await _orgService.GetAllHouses(id));
+        [HttpGet("Building/{id}")]
+        public async Task<IActionResult> GetAllHouses(long id) => Ok(await _orgService.GetAllBuildings(id));
 
-        [HttpPost("House")]
-        public async Task<IActionResult> AddHouse(HouseDto house) => Ok(await _orgService.AddHouse(house));
+        [HttpPost("Building")]
+        public async Task<IActionResult> AddHouse(BuildingDto house) => Ok(await _orgService.AddBuilding(house));
 
-        [HttpPut("House")]
-        public async Task<IActionResult> UpdateHouse(HouseDto house) => Ok(await _orgService.UpdateHouse(house));
+        [HttpPut("Building")]
+        public async Task<IActionResult> UpdateHouse(BuildingDto house) => Ok(await _orgService.UpdateBuilding(house));
+
+        [HttpGet("BuildingFloor/{id}")]
+        public async Task<IActionResult> GetAllBuildingFloors(long id) => Ok(await _orgService.GetAllBuildingFloors(id));;
+
+        [HttpPost("BuildingFloor")]
+        public async Task<IActionResult> AddBuildingFloor(BuildingFloorDto house) => Ok(await _orgService.AddBuildingFloor(house));
+
+        [HttpPut("BuildingFloor")]
+        public async Task<IActionResult> UpdateBuildingFloor(BuildingFloorDto house) => Ok(await _orgService.UpdateBuildingFloor(house));
     }
 }

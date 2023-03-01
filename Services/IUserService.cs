@@ -13,7 +13,7 @@ namespace SmartSence.Services
         Task<UserDto> GetCurrentUserAsync();
 
         Task<PaginatedResult<UserDto>> GetAllAsync(int pageNumber, int pageSize, string sortField,
-            string sortOrder, string searchText);
+            string sortOrder, string searchText, long? orgId);
 
         Task<IResult> ChangePasswordAsync(ChangePasswordRequest model);
 

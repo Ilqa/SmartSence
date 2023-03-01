@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SmartSence.Database;
@@ -11,9 +12,11 @@ using SmartSence.Database;
 namespace SmartSence.Migrations
 {
     [DbContext(typeof(SmartSenceContext))]
-    partial class SmartSenceContextModelSnapshot : ModelSnapshot
+    [Migration("20230301163026_UpdateEntities")]
+    partial class UpdateEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,27 +126,6 @@ namespace SmartSence.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("SmartSence.Database.Entities.BuildingFloor", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("BuildingId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("Floor")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BuildingId");
-
-                    b.ToTable("BuildingFloor");
                 });
 
             modelBuilder.Entity("SmartSence.Database.Entities.DeviceTelemetryJson", b =>
@@ -316,46 +298,6 @@ namespace SmartSence.Migrations
                     b.ToTable("block", (string)null);
                 });
 
-            modelBuilder.Entity("SmartSence.Databse.Entities.Building", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("address");
-
-                    b.Property<long>("Blockid")
-                        .HasColumnType("bigint")
-                        .HasColumnName("blockid");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("description");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character(50)")
-                        .HasColumnName("name")
-                        .IsFixedLength();
-
-                    b.HasKey("Id")
-                        .HasName("house_pkey");
-
-                    b.HasIndex("Blockid");
-
-                    b.ToTable("house", (string)null);
-                });
-
             modelBuilder.Entity("SmartSence.Databse.Entities.DeviceInfo", b =>
                 {
                     b.Property<int>("Id")
@@ -365,8 +307,8 @@ namespace SmartSence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<long?>("BuildingFloorId")
-                        .HasColumnType("bigint");
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -374,7 +316,7 @@ namespace SmartSence.Migrations
                         .HasColumnType("character varying(500)")
                         .HasColumnName("description");
 
-                    b.Property<string>("DeviceEUI")
+                    b.Property<string>("Deviceeui")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
@@ -385,6 +327,10 @@ namespace SmartSence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
                         .HasColumnName("devicetype");
+
+                    b.Property<long?>("Houseid")
+                        .HasColumnType("bigint")
+                        .HasColumnName("houseid");
 
                     b.Property<string>("Manufacturer")
                         .IsRequired()
@@ -409,13 +355,10 @@ namespace SmartSence.Migrations
                         .HasColumnType("character varying(50)")
                         .HasColumnName("serialnumber");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id")
                         .HasName("device_info_pkey");
 
-                    b.HasIndex("BuildingFloorId");
+                    b.HasIndex("Houseid");
 
                     b.HasIndex("Orgid");
 
@@ -462,6 +405,46 @@ namespace SmartSence.Migrations
                     b.HasIndex("Deviceid");
 
                     b.ToTable("device_telemetry", (string)null);
+                });
+
+            modelBuilder.Entity("SmartSence.Databse.Entities.House", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("address");
+
+                    b.Property<long>("Blockid")
+                        .HasColumnType("bigint")
+                        .HasColumnName("blockid");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character(50)")
+                        .HasColumnName("name")
+                        .IsFixedLength();
+
+                    b.HasKey("Id")
+                        .HasName("house_pkey");
+
+                    b.HasIndex("Blockid");
+
+                    b.ToTable("house", (string)null);
                 });
 
             modelBuilder.Entity("SmartSence.Databse.Entities.Organization", b =>
@@ -644,17 +627,6 @@ namespace SmartSence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SmartSence.Database.Entities.BuildingFloor", b =>
-                {
-                    b.HasOne("SmartSence.Databse.Entities.Building", "Building")
-                        .WithMany()
-                        .HasForeignKey("BuildingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Building");
-                });
-
             modelBuilder.Entity("SmartSence.Database.Entities.User", b =>
                 {
                     b.HasOne("SmartSence.Databse.Entities.Organization", "Organization")
@@ -675,29 +647,19 @@ namespace SmartSence.Migrations
                     b.Navigation("Sector");
                 });
 
-            modelBuilder.Entity("SmartSence.Databse.Entities.Building", b =>
-                {
-                    b.HasOne("SmartSence.Databse.Entities.Block", "Block")
-                        .WithMany("Houses")
-                        .HasForeignKey("Blockid")
-                        .IsRequired()
-                        .HasConstraintName("house_blockid_fkey");
-
-                    b.Navigation("Block");
-                });
-
             modelBuilder.Entity("SmartSence.Databse.Entities.DeviceInfo", b =>
                 {
-                    b.HasOne("SmartSence.Database.Entities.BuildingFloor", "BuildingFloor")
+                    b.HasOne("SmartSence.Databse.Entities.House", "House")
                         .WithMany("DeviceInfos")
-                        .HasForeignKey("BuildingFloorId");
+                        .HasForeignKey("Houseid")
+                        .HasConstraintName("deviceinfo_houseid_fkey");
 
                     b.HasOne("SmartSence.Databse.Entities.Organization", "Org")
                         .WithMany("DeviceInfos")
                         .HasForeignKey("Orgid")
                         .HasConstraintName("deviceinfo_orgid_fkey");
 
-                    b.Navigation("BuildingFloor");
+                    b.Navigation("House");
 
                     b.Navigation("Org");
                 });
@@ -712,6 +674,17 @@ namespace SmartSence.Migrations
                     b.Navigation("Device");
                 });
 
+            modelBuilder.Entity("SmartSence.Databse.Entities.House", b =>
+                {
+                    b.HasOne("SmartSence.Databse.Entities.Block", "Block")
+                        .WithMany("Houses")
+                        .HasForeignKey("Blockid")
+                        .IsRequired()
+                        .HasConstraintName("house_blockid_fkey");
+
+                    b.Navigation("Block");
+                });
+
             modelBuilder.Entity("SmartSence.Databse.Entities.Sector", b =>
                 {
                     b.HasOne("SmartSence.Databse.Entities.Organization", "Org")
@@ -723,11 +696,6 @@ namespace SmartSence.Migrations
                     b.Navigation("Org");
                 });
 
-            modelBuilder.Entity("SmartSence.Database.Entities.BuildingFloor", b =>
-                {
-                    b.Navigation("DeviceInfos");
-                });
-
             modelBuilder.Entity("SmartSence.Databse.Entities.Block", b =>
                 {
                     b.Navigation("Houses");
@@ -736,6 +704,11 @@ namespace SmartSence.Migrations
             modelBuilder.Entity("SmartSence.Databse.Entities.DeviceInfo", b =>
                 {
                     b.Navigation("DeviceTelemetries");
+                });
+
+            modelBuilder.Entity("SmartSence.Databse.Entities.House", b =>
+                {
+                    b.Navigation("DeviceInfos");
                 });
 
             modelBuilder.Entity("SmartSence.Databse.Entities.Organization", b =>
