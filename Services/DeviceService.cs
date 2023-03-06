@@ -35,6 +35,12 @@ namespace SmartSence.Services
             throw new NotImplementedException();
         }
 
+        public async Task<Result<List<DeviceDto>>> GetDevicesByFloor(long id)
+        {
+            var devices = await _repositoryAsync.Entities.Where(s => s.BuildingFloorId == id).ToListAsync();
+            return await Result<List<DeviceDto>>.SuccessAsync(_mapper.Map<List<DeviceDto>>(devices));
+        }
+
         public async Task<Result<List<DeviceDto>>> GetDevicesByHouse(long id)
         {
             var devices = await _repositoryAsync.Entities.Where(s => s.BuildingFloor.BuildingId == id).ToListAsync();
@@ -56,7 +62,7 @@ namespace SmartSence.Services
         {
             var deviceDb = await _repositoryAsync.Entities.FirstOrDefaultAsync(s => s.Id == device.Id);
             if (deviceDb == null)
-                return Result<long>.Fail($"DEvice Not Found.");
+                return Result<long>.Fail($"Device Not Found.");
 
             deviceDb = _mapper.Map(device, deviceDb);
             await _repositoryAsync.UpdateAsync(deviceDb);

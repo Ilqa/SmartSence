@@ -29,7 +29,7 @@ namespace SmartSence.Services
         Task<IResult> AddBuildingFloor(BuildingFloorDto floor);
         Task<IResult> UpdateBuildingFloor(BuildingFloorDto floor);
         Task<IResult> DeleteBuildingFloor(long id);
-        Task<Result<List<BuildingDto>>> GetAllBuildingFloors(long floorId);
+        Task<Result<List<BuildingFloorDto>>> GetAllBuildingFloors(long floorId);
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SmartSence.Database.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace SmartSence.Databse.Entities;
@@ -28,6 +29,8 @@ public partial class Organization
     public string Webaddress { get; set; } = null!;
 
     public virtual ICollection<DeviceInfo> DeviceInfos { get; } = new List<DeviceInfo>();
+
+    public virtual ICollection<Gateway> Gateways { get; } = new List<Gateway>();
 
     public virtual ICollection<Sector> Sectors { get; } = new List<Sector>();
 }

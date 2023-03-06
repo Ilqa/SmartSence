@@ -56,7 +56,7 @@ namespace SmartSence.Controllers
         public async Task<IActionResult> UpdateHouse(BuildingDto house) => Ok(await _orgService.UpdateBuilding(house));
 
         [HttpGet("BuildingFloor/{id}")]
-        public async Task<IActionResult> GetAllBuildingFloors(long id) => Ok(await _orgService.GetAllBuildingFloors(id));;
+        public async Task<IActionResult> GetAllBuildingFloors(long id) => Ok(await _orgService.GetAllBuildingFloors(id));
 
         [HttpPost("BuildingFloor")]
         public async Task<IActionResult> AddBuildingFloor(BuildingFloorDto house) => Ok(await _orgService.AddBuildingFloor(house));
