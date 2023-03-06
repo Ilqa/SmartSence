@@ -36,4 +36,6 @@ public partial class DeviceInfo
 
     public long? Orgid { get; set; }
     public virtual Organization? Org { get; set; }
+
+   
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 //using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using SmartSence.Database.Entities;
 using SmartSence.Database.Repositories;
 using SmartSence.Databse.Entities;
 using SmartSence.DTO;
@@ -13,14 +14,19 @@ namespace SmartSence.Services
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepositoryAsync<DeviceInfo> _repositoryAsync;
-        
+        private readonly IRepositoryAsync<DeviceTelemetry> _telemetryRepo;
+        private readonly IRepositoryAsync<DeviceTelemetryJson> _telemetryJsonRepo;
 
 
-        public DeviceService( IMapper mapper, IUnitOfWork unitOfWork, IRepositoryAsync<DeviceInfo> repositoryAsync)
+
+
+        public DeviceService( IMapper mapper, IUnitOfWork unitOfWork, IRepositoryAsync<DeviceInfo> repositoryAsync, IRepositoryAsync<DeviceTelemetry> telemetryRepo, IRepositoryAsync<DeviceTelemetryJson> telemetryJsonRepo)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _repositoryAsync = repositoryAsync;
+            _telemetryRepo= telemetryRepo;
+            _telemetryJsonRepo= telemetryJsonRepo;
         }
 
         public async Task<Wrappers.IResult> AddDevice(DeviceDto device)
@@ -53,9 +59,24 @@ namespace SmartSence.Services
             return await Result<List<DeviceDto>>.SuccessAsync(_mapper.Map<List<DeviceDto>>(devices));
         }
 
-        public Task<Wrappers.IResult> SaveDeviceTelemetry(int deviveId, JsonContent content)
+        //public Task<Result<List<DeviceDto>>> GetDevicesBySector(long id)
+        //{
+        //    var devices = await _repositoryAsync.Entities.Where(s => s.Orgid == id).ToListAsync();
+        //    return await Result<List<DeviceDto>>.SuccessAsync(_mapper.Map<List<DeviceDto>>(devices));
+        //}
+
+        public async Task<Wrappers.IResult> SaveDeviceTelemetry(DeviceTelemetryDto telemetry)
         {
-            throw new NotImplementedException();
+            int? deviceId = _repositoryAsync.Entities.FirstOrDefault(d => d.DeviceEUI == telemetry.DeviceEui)?.Id;
+            if(deviceId == null)
+                return await Result.FailAsync("Device not recognized");
+
+            var deviceTelemetry = _mapper.Map<DeviceTelemetry>(telemetry);
+            deviceTelemetry.Deviceid = deviceId;
+            await _telemetryRepo.AddAsync(deviceTelemetry);
+            await _telemetryJsonRepo.AddAsync(new DeviceTelemetryJson() { DeviceId = deviceId.Value, MsqJson = deviceTelemetry.Data });
+            await _unitOfWork.Commit();
+            return await Result.SuccessAsync("Device Telemetry Added Successfully");
         }
 
         public async Task<Wrappers.IResult> UpdateDevice(DeviceDto device)

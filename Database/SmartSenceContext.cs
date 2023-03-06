@@ -113,12 +113,12 @@ public partial class SmartSenceContext : IdentityDbContext<User, UserRole, long>
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");
-            entity.Property(e => e.Appeui)
+            entity.Property(e => e.AppEui)
                 .HasMaxLength(50)
                 .HasColumnName("appeui");
-            entity.Property(e => e.Datetime).HasColumnName("datetime");
+            entity.Property(e => e.Time).HasColumnName("datetime");
             entity.Property(e => e.Deviceid).HasColumnName("deviceid");
-            entity.Property(e => e.Msqjson)
+            entity.Property(e => e.Data)
                 .HasMaxLength(50)
                 .HasColumnName("msqjson");
             entity.Property(e => e.Port).HasColumnName("port");

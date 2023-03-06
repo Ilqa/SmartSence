@@ -27,10 +27,16 @@ namespace SmartSence.Controllers
         [HttpGet("ByOrganization/{id}")]
         public async Task<IActionResult> GetDevices(long orgId) => Ok(await _deviceService.GetDevicesByOrganization(orgId));
 
+        //[HttpGet("BySector/{id}")]
+        //public async Task<IActionResult> GetDevicesBySector(long sectorId) => Ok(await _deviceService.GetDevicesByOrganization(orgId));
+
         [HttpGet("ByBuilding/{id}")]
         public async Task<IActionResult> GetDevicesByBuildingId(long houseId) => Ok(await _deviceService.GetDevicesByHouse(houseId));
 
         [HttpGet("ByFloor/{id}")]
         public async Task<IActionResult> GetDevicesByHouseId(long houseId) => Ok(await _deviceService.GetDevicesByFloor(houseId));
+
+        [HttpPost("DeviceTelemetry")]
+        public async Task<IActionResult> SaveDeviceTelemetry(DeviceTelemetryDto telemetry) => Ok(await _deviceService.SaveDeviceTelemetry(telemetry));
     }
 }

@@ -12,10 +12,12 @@ namespace SmartSence.Services
         Task<IResult> DeleteDevice(DeviceDto device);
 
         Task<Result<List<DeviceDto>>> GetDevicesByOrganization(long id);
+
+       // Task<Result<List<DeviceDto>>> GetDevicesBySector(long id);
         Task<Result<List<DeviceDto>>> GetDevicesByFloor(long id);
 
         Task<Result<List<DeviceDto>>> GetDevicesByHouse(long id);
-        Task<IResult> SaveDeviceTelemetry(int deviveId, JsonContent content);
+        Task<IResult> SaveDeviceTelemetry(DeviceTelemetryDto telemetry);
 
     }
 }

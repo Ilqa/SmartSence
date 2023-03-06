@@ -9,15 +9,21 @@ public partial class DeviceTelemetry
 
     public long Seqno { get; set; }
 
-    public string Appeui { get; set; } = null!;
+    public string AppEui { get; set; } = null!;
 
-    public DateOnly Datetime { get; set; }
+    public DateTime Time { get; set; }
 
     public int Port { get; set; }
 
-    public string Msqjson { get; set; } = null!;
+    public string Data { get; set; } = null!;
 
     public int? Deviceid { get; set; }
 
     public virtual DeviceInfo? Device { get; set; }
+
+    public string DeviceEui { get; set; }
+
+    public string DeviceTx { get; set; } 
+
+    public string GatewayRx { get; set; } 
 }
