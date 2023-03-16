@@ -31,6 +31,8 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 // Register interface and classes
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IGatewayService, GatewayService>();
+
 builder.Services.AddScoped<IOrganizationService, OrganizationService>();
 builder.Services.AddScoped<IDeviceService, DeviceService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -61,6 +63,13 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+                    name: "AllowOrigin",
+                    builder => { builder.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin(); });
+});
+
 
 var app = builder.Build();
 
@@ -75,7 +84,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+app.UseCors("AllowOrigin");
 app.MapControllers();
 
 app.Run();

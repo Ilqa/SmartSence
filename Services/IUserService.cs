@@ -22,6 +22,8 @@ namespace SmartSence.Services
         Task<int> GetCountAsync();
         Task<Result<TokenResponse>> Login(LoginModel model);
 
+        Task<Result<DashboardSummary>> GetUserSummary(DashboardFilter filter);
+
 
         //Task<IResult<UserResponse>> GetAsync(string userId);
 

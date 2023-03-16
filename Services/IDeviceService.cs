@@ -19,5 +19,7 @@ namespace SmartSence.Services
         Task<Result<List<DeviceDto>>> GetDevicesByHouse(long id);
         Task<IResult> SaveDeviceTelemetry(DeviceTelemetryDto telemetry);
 
+        Task<Result<DashboardSummary>> GetDeviceSummary(DashboardFilter filter);
+
     }
 }

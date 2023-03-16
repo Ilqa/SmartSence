@@ -6,7 +6,11 @@ using SmartSence.Database.Entities;
 using SmartSence.Database.Repositories;
 using SmartSence.Databse.Entities;
 using SmartSence.DTO;
+using SmartSence.DTO.Identity;
+using SmartSence.Extensions;
 using SmartSence.Wrappers;
+using System.Linq.Dynamic.Core;
+
 
 namespace SmartSence.Services
 {
@@ -40,6 +44,27 @@ namespace SmartSence.Services
         {
             var orgs = await _organizationRepository.GetAllAsync();
             return await Result<List<OrganizationDto>>.SuccessAsync(_mapper.Map<List<OrganizationDto>>(orgs));
+        }
+
+        public async Task<PaginatedResult<OrganizationDto>> GetAllAsync(int pageNumber, int pageSize, string sortField, string sortOrder, string searchText)
+        {           
+            var filteredOrgs = searchText.IsNullOrEmpty()
+                ? _organizationRepository.Entities
+                : _organizationRepository.Entities.Where(p => p.Name.Contains(searchText));
+
+            var sortedOrgs = filteredOrgs.OrderBy($"{sortField} {sortOrder}");
+            
+            var orgs = sortedOrgs.Select(l => _mapper.Map<OrganizationDto>(l)).ToPaginatedListAsync(pageNumber, pageSize);
+
+            //foreach (var mappedUser in userResponses.Result.Data)
+            //{
+            //    var user = sortedUsers.First(u => u.Id.Equals(mappedUser.Id));
+            //    var roles = await _userManager.GetRolesAsync(user);
+            //    mappedUser.Roles = roles.ToList();
+            //}
+
+            return await orgs;
+
         }
 
         public async Task<Wrappers.IResult> AddOrganization(OrganizationDto org)

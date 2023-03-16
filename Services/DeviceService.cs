@@ -90,5 +90,17 @@ namespace SmartSence.Services
             await _unitOfWork.Commit();
             return Result<long>.Success(deviceDb.Id, "Device updated successfully");
         }
+
+        public async Task<Result<DashboardSummary>> GetDeviceSummary(DashboardFilter filter)
+        {
+            var summary = new DashboardSummary
+            {
+                EntityType = "Device",
+                OnlineEntites = 25,
+                OfflineEntities = 3
+            };
+
+            return await Result<DashboardSummary>.SuccessAsync(summary);
+        }
     }
 }

@@ -19,6 +19,8 @@ public partial class DeviceTelemetry
 
     public int? Deviceid { get; set; }
 
+    public string DeviceType { get; set; }
+
     public virtual DeviceInfo? Device { get; set; }
 
     public string DeviceEui { get; set; }

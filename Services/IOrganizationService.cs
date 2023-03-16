@@ -9,6 +9,8 @@ namespace SmartSence.Services
     public interface IOrganizationService
     {            
         Task<IResult> AddOrganization(OrganizationDto company);
+
+        Task<PaginatedResult<OrganizationDto>> GetAllAsync(int pageNumber, int pageSize, string sortField, string sortOrder, string searchText);
         Task<IResult> UpdateOrganization(OrganizationDto company);
         Task<IResult> DeleteOrganization(long id);
         Task<Result<List<OrganizationDto>>> GetAllOrganizations();

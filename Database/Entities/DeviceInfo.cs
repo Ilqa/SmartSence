@@ -1,9 +1,6 @@
 ﻿using SmartSence.Database.Entities;
 
 using SmartSence.Enums;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SmartSence.Databse.Entities;

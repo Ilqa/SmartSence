@@ -60,5 +60,17 @@ namespace SmartSence.Services
             await _unitOfWork.Commit();
             return Result<long>.Success(GatewayDb.Id, "Gateway updated successfully");
         }
+
+        public async Task<Result<DashboardSummary>> GetGatewaySummary(DashboardFilter filter)
+        {
+            var summary = new DashboardSummary
+            {
+                EntityType = "Gateway",
+                OnlineEntites = 13,
+                OfflineEntities = 2
+            };
+
+            return await Result<DashboardSummary>.SuccessAsync(summary);
+        }
     }
 }

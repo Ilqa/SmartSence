@@ -12,9 +12,11 @@ namespace SmartSence.Services
         Task<IResult> DeleteGateway(GatewayDto Gateway);
 
         Task<Result<List<GatewayDto>>> GetGatewaysByOrganization(long id);
+
+        Task<Result<DashboardSummary>> GetGatewaySummary(DashboardFilter filter);
         //Task<Result<List<GatewayDto>>> GetGatewaysByFloor(long id);
 
         //Task<Result<List<GatewayDto>>> GetGatewaysByHouse(long id);
-       
+
     }
 }

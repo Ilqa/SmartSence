@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SmartSence.Database.Entities;
+using SmartSence.DTO;
 using SmartSence.DTO.Identity;
 using SmartSence.Extensions;
 using SmartSence.Wrappers;
@@ -215,7 +216,19 @@ namespace SmartSence.Services
             return await Result<TokenResponse>.SuccessAsync(response);
         }
 
-       
+        public async Task<Result<DashboardSummary>> GetUserSummary(DashboardFilter filter)
+        {
+            var summary = new DashboardSummary
+            {
+                EntityType = "User",
+                OnlineEntites = 13,
+                OfflineEntities = 2
+            };
+
+            return await Result<DashboardSummary>.SuccessAsync(summary);
+        }
+
+
 
 
 

@@ -33,5 +33,10 @@ namespace SmartSence.Controllers
 
         //[HttpGet("ByHouse/{id}")]
         //public async Task<IActionResult> GetGatewaysByHouseId(long houseId) => Ok(await _GatewayService.GetGatewaysByHouse(houseId));
+
+        [HttpPost("GetGatewaySummary")]
+        public async Task<IActionResult> GetGatewaySummary(DashboardFilter filter) => Ok(await _GatewayService.GetGatewaySummary(filter));
+
+
     }
 }

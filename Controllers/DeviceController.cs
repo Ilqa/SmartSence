@@ -38,5 +38,9 @@ namespace SmartSence.Controllers
 
         [HttpPost("DeviceTelemetry")]
         public async Task<IActionResult> SaveDeviceTelemetry(DeviceTelemetryDto telemetry) => Ok(await _deviceService.SaveDeviceTelemetry(telemetry));
+
+        [HttpPost("GetDeviceSummary")]
+        public async Task<IActionResult> GetDeviceSummary(DashboardFilter filter) => Ok(await _deviceService.GetDeviceSummary(filter));
+
     }
 }

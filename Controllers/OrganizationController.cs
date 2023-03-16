@@ -18,9 +18,19 @@ namespace SmartSence.Controllers
             _logger = logger;
         }
 
-
         [HttpGet("Organizations")]
-        public async Task<IActionResult> GetAllOrganizations() => Ok(await _orgService.GetAllOrganizations());
+        public async Task<IActionResult> GetAll(int? pageNumber, int? pageSize, string? sortField, string? sortOrder, string? searchText)
+        {
+            var orgs = await _orgService.GetAllAsync(pageNumber ?? 1, pageSize ?? 10, sortField ?? "Name", sortOrder ?? "ASC", searchText ?? "");
+            orgs.Data.Add(new OrganizationDto() { Id = 1, Name = "Org1", Address = "bloack A AIT Lahore", Coordinates = "xy" });
+            orgs.TotalCount = 1;
+            return Ok(orgs);    
+            //return Ok(await _orgService.GetAllAsync(pageNumber ?? 1, pageSize ?? 10, sortField ?? "Name", sortOrder ?? "ASC", searchText ?? ""));
+        }
+
+
+        //[HttpGet("Organizations")]
+        //public async Task<IActionResult> GetAllOrganizations() => Ok(await _orgService.GetAllOrganizations());
 
         [HttpPost("Organization")]
         public async Task<IActionResult> AddOrganization(OrganizationDto org) => Ok(await _orgService.AddOrganization(org));

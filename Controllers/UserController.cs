@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SmartSence.DTO;
 using SmartSence.DTO.Identity;
 using SmartSence.Services;
 using System.Threading.Tasks;
@@ -26,6 +27,9 @@ namespace JobHunt.Controllers.Identity
 
         [HttpPost("Login")]
         public async Task<IActionResult> Get(LoginModel model) => Ok(await _userService.Login(model));
+
+        [HttpPost("GetUserSummary")]
+        public async Task<IActionResult> GetUserSummary(DashboardFilter filter) => Ok(await _userService.GetUserSummary(filter));
 
 
         ////[Authorize(Policy = Permissions.Users.View)]
