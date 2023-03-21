@@ -11,9 +11,13 @@ namespace SmartSence.Services
         Task<IResult> AddOrganization(OrganizationDto company);
 
         Task<PaginatedResult<OrganizationDto>> GetAllAsync(int pageNumber, int pageSize, string sortField, string sortOrder, string searchText);
+
+        Task<Result<List<LiteEntityDto>>> GetAllOrganizations();
+        Task<Result<List<LiteEntityDto>>> GetAllSectorsLite(long orgId);
+        Task<Result<List<LiteEntityDto>>> GetAllBlocksLite(long sectorId);
         Task<IResult> UpdateOrganization(OrganizationDto company);
         Task<IResult> DeleteOrganization(long id);
-        Task<Result<List<OrganizationDto>>> GetAllOrganizations();
+        //Task<Result<List<OrganizationDto>>> GetAllOrganizations();
         Task<IResult> AddSector(SectorDto sector);
         Task<IResult> UpdateSector(SectorDto sector);
         Task<IResult> DeleteSector(long id);

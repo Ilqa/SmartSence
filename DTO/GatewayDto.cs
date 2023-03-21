@@ -8,5 +8,7 @@ namespace SmartSence.DTO
         public string Name { get; set; }
         public string GatewayEUI { get; set; }
         public StatusEnum Status { get; set; }
+
+        public long? Orgid { get; set; }
     }
 }

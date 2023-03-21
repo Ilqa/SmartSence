@@ -9,6 +9,7 @@ namespace JobHunt.Mappings
         public SectorPofile()
         {
             CreateMap<SectorDto, Sector>().ReverseMap();
+            CreateMap<LiteEntityDto, Sector>().ReverseMap();
         }
     }
 }

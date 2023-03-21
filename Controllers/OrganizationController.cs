@@ -21,11 +21,29 @@ namespace SmartSence.Controllers
         [HttpGet("Organizations")]
         public async Task<IActionResult> GetAll(int? pageNumber, int? pageSize, string? sortField, string? sortOrder, string? searchText)
         {
-            var orgs = await _orgService.GetAllAsync(pageNumber ?? 1, pageSize ?? 10, sortField ?? "Name", sortOrder ?? "ASC", searchText ?? "");
-            orgs.Data.Add(new OrganizationDto() { Id = 1, Name = "Org1", Address = "bloack A AIT Lahore", Coordinates = "xy" });
-            orgs.TotalCount = 1;
-            return Ok(orgs);    
-            //return Ok(await _orgService.GetAllAsync(pageNumber ?? 1, pageSize ?? 10, sortField ?? "Name", sortOrder ?? "ASC", searchText ?? ""));
+            //var orgs = await _orgService.GetAllAsync(pageNumber ?? 1, pageSize ?? 10, sortField ?? "Name", sortOrder ?? "ASC", searchText ?? "");
+            //orgs.Data.Add(new OrganizationDto() { Id = 1, Name = "Org1", Address = "bloack A AIT Lahore", Coordinates = "xy" });
+            //orgs.TotalCount = 1;
+            //return Ok(orgs);    
+            return Ok(await _orgService.GetAllAsync(pageNumber ?? 1, pageSize ?? 10, sortField ?? "Name", sortOrder ?? "ASC", searchText ?? ""));
+        }
+
+        [HttpGet("AllOrganizations")]
+        public async Task<IActionResult> GetAllOrganizations()
+        {     
+            return Ok(await _orgService.GetAllOrganizations());
+        }
+
+        [HttpGet("AllSectors/{orgId}")]
+        public async Task<IActionResult> GetAllSectorsLite(long orgId)
+        {
+            return Ok(await _orgService.GetAllSectorsLite(orgId));
+        }
+
+        [HttpGet("AllBlocks/{sectorId}")]
+        public async Task<IActionResult> GetAllBlocksLite(long sectorId)
+        {
+            return Ok(await _orgService.GetAllBlocksLite(sectorId));
         }
 
 

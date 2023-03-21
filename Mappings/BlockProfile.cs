@@ -9,6 +9,7 @@ namespace JobHunt.Mappings
         public BlockProfile()
         {
             CreateMap<BlockDto, Block>().ReverseMap();
+            CreateMap<LiteEntityDto, Block>().ReverseMap();
         }
     }
 }

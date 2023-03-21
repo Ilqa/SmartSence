@@ -12,8 +12,8 @@ using SmartSence.Database;
 namespace SmartSence.Migrations
 {
     [DbContext(typeof(SmartSenceContext))]
-    [Migration("20230306181315_DeviceTelemtryUpdated")]
-    partial class DeviceTelemtryUpdated
+    [Migration("20230321110639_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -306,94 +306,71 @@ namespace SmartSence.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("id");
+                        .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("address");
+                        .HasColumnType("text");
 
                     b.Property<string>("Coordinates")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("coordinates");
+                        .HasColumnType("text");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("description");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character(50)")
-                        .HasColumnName("name")
-                        .IsFixedLength();
+                        .HasColumnType("text");
 
                     b.Property<long>("Sectorid")
-                        .HasColumnType("bigint")
-                        .HasColumnName("sectorid");
+                        .HasColumnType("bigint");
 
-                    b.HasKey("Id")
-                        .HasName("block_pkey");
+                    b.HasKey("Id");
 
                     b.HasIndex("Sectorid");
 
-                    b.ToTable("block", (string)null);
+                    b.ToTable("Blocks");
                 });
 
             modelBuilder.Entity("SmartSence.Databse.Entities.Building", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("id");
+                        .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("address");
+                        .HasColumnType("text");
 
                     b.Property<long>("Blockid")
-                        .HasColumnType("bigint")
-                        .HasColumnName("blockid");
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("description");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character(50)")
-                        .HasColumnName("name")
-                        .IsFixedLength();
+                        .HasColumnType("text");
 
-                    b.HasKey("Id")
-                        .HasName("house_pkey");
+                    b.HasKey("Id");
 
                     b.HasIndex("Blockid");
 
-                    b.ToTable("house", (string)null);
+                    b.ToTable("Houses");
                 });
 
             modelBuilder.Entity("SmartSence.Databse.Entities.DeviceInfo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
@@ -402,75 +379,58 @@ namespace SmartSence.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("description");
+                        .HasColumnType("text");
 
                     b.Property<string>("DeviceEUI")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("deviceeui");
+                        .HasColumnType("text");
 
                     b.Property<string>("Devicetype")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("devicetype");
+                        .HasColumnType("text");
 
                     b.Property<string>("Manufacturer")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("manufacturer");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character(50)")
-                        .HasColumnName("name")
-                        .IsFixedLength();
+                        .HasColumnType("text");
 
                     b.Property<long?>("Orgid")
-                        .HasColumnType("bigint")
-                        .HasColumnName("orgid");
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Serialnumber")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("serialnumber");
+                        .HasColumnType("text");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id")
-                        .HasName("device_info_pkey");
+                    b.HasKey("Id");
 
                     b.HasIndex("BuildingFloorId");
 
                     b.HasIndex("Orgid");
 
-                    b.ToTable("device_info", (string)null);
+                    b.ToTable("DeviceInfos");
                 });
 
             modelBuilder.Entity("SmartSence.Databse.Entities.DeviceTelemetry", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AppEui")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("appeui");
+                        .HasColumnType("text");
 
                     b.Property<string>("Data")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("msqjson");
+                        .HasColumnType("text");
 
                     b.Property<string>("DeviceEui")
                         .IsRequired()
@@ -480,161 +440,122 @@ namespace SmartSence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("DeviceType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int?>("Deviceid")
-                        .HasColumnType("integer")
-                        .HasColumnName("deviceid");
+                        .HasColumnType("integer");
 
                     b.Property<string>("GatewayRx")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Port")
-                        .HasColumnType("integer")
-                        .HasColumnName("port");
+                        .HasColumnType("integer");
 
                     b.Property<long>("Seqno")
-                        .HasColumnType("bigint")
-                        .HasColumnName("seqno");
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("Time")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("datetime");
+                        .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("Id")
-                        .HasName("device_telemetry_pkey");
+                    b.HasKey("Id");
 
                     b.HasIndex("Deviceid");
 
-                    b.ToTable("device_telemetry", (string)null);
+                    b.ToTable("DeviceTelemetries");
                 });
 
             modelBuilder.Entity("SmartSence.Databse.Entities.Organization", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("id");
+                        .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("address");
+                        .HasColumnType("text");
 
                     b.Property<string>("Coordinates")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("coordinates");
+                        .HasColumnType("text");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("email");
+                        .HasColumnType("text");
 
                     b.Property<string>("Inventorydescription")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("inventorydescription");
+                        .HasColumnType("text");
 
                     b.Property<string>("Logo")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character(50)")
-                        .HasColumnName("logo")
-                        .IsFixedLength();
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character(50)")
-                        .HasColumnName("name")
-                        .IsFixedLength();
+                        .HasColumnType("text");
 
                     b.Property<string>("Noofdevices")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("noofdevices");
+                        .HasColumnType("text");
 
                     b.Property<string>("Noofgateways")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("noofgateways");
+                        .HasColumnType("text");
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("phone");
+                        .HasColumnType("text");
 
                     b.Property<string>("Webaddress")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("webaddress");
+                        .HasColumnType("text");
 
-                    b.HasKey("Id")
-                        .HasName("organization_pkey");
+                    b.HasKey("Id");
 
-                    b.ToTable("organization", (string)null);
+                    b.ToTable("Organizations");
                 });
 
             modelBuilder.Entity("SmartSence.Databse.Entities.Sector", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("id");
+                        .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("address");
+                        .HasColumnType("text");
 
                     b.Property<string>("Coordinates")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("coordinates");
+                        .HasColumnType("text");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("description");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character(50)")
-                        .HasColumnName("name")
-                        .IsFixedLength();
+                        .HasColumnType("text");
 
                     b.Property<string>("Networkdescription")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("networkdescription");
+                        .HasColumnType("text");
 
                     b.Property<long>("Orgid")
-                        .HasColumnType("bigint")
-                        .HasColumnName("orgid");
+                        .HasColumnType("bigint");
 
-                    b.HasKey("Id")
-                        .HasName("sector_pkey");
+                    b.HasKey("Id");
 
                     b.HasIndex("Orgid");
 
-                    b.ToTable("sector", (string)null);
+                    b.ToTable("Sectors");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
@@ -722,8 +643,8 @@ namespace SmartSence.Migrations
                     b.HasOne("SmartSence.Databse.Entities.Sector", "Sector")
                         .WithMany("Blocks")
                         .HasForeignKey("Sectorid")
-                        .IsRequired()
-                        .HasConstraintName("block_sectorid_fkey");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Sector");
                 });
@@ -733,8 +654,8 @@ namespace SmartSence.Migrations
                     b.HasOne("SmartSence.Databse.Entities.Block", "Block")
                         .WithMany("Houses")
                         .HasForeignKey("Blockid")
-                        .IsRequired()
-                        .HasConstraintName("house_blockid_fkey");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Block");
                 });
@@ -747,8 +668,7 @@ namespace SmartSence.Migrations
 
                     b.HasOne("SmartSence.Databse.Entities.Organization", "Org")
                         .WithMany("DeviceInfos")
-                        .HasForeignKey("Orgid")
-                        .HasConstraintName("deviceinfo_orgid_fkey");
+                        .HasForeignKey("Orgid");
 
                     b.Navigation("BuildingFloor");
 
@@ -759,8 +679,7 @@ namespace SmartSence.Migrations
                 {
                     b.HasOne("SmartSence.Databse.Entities.DeviceInfo", "Device")
                         .WithMany("DeviceTelemetries")
-                        .HasForeignKey("Deviceid")
-                        .HasConstraintName("device_telemetry_deviceid_fkey");
+                        .HasForeignKey("Deviceid");
 
                     b.Navigation("Device");
                 });
@@ -770,8 +689,8 @@ namespace SmartSence.Migrations
                     b.HasOne("SmartSence.Databse.Entities.Organization", "Org")
                         .WithMany("Sectors")
                         .HasForeignKey("Orgid")
-                        .IsRequired()
-                        .HasConstraintName("sector_orgid_fkey");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Org");
                 });

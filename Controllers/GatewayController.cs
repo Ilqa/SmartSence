@@ -25,7 +25,7 @@ namespace SmartSence.Controllers
         public async Task<IActionResult> UpdateGateway(GatewayDto Gateway) => Ok(await _GatewayService.UpdateGateway(Gateway));
 
         [HttpGet("ByOrganization/{id}")]
-        public async Task<IActionResult> GetGateways(long orgId) => Ok(await _GatewayService.GetGatewaysByOrganization(orgId));
+        public async Task<IActionResult> GetGateways(long id) => Ok(await _GatewayService.GetGatewaysByOrganization(id));
 
         //[HttpGet("ByFloor/{id}")]
         //public async Task<IActionResult> GetGatewaysByFloorId(long houseId) => Ok(await _GatewayService.GetGatewaysByFloor(houseId));

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using SmartSence.DTO;
 using SmartSence.Services;
@@ -25,7 +26,7 @@ namespace SmartSence.Controllers
         public async Task<IActionResult> UpdateDevice(DeviceDto device) => Ok(await _deviceService.UpdateDevice(device));
 
         [HttpGet("ByOrganization/{id}")]
-        public async Task<IActionResult> GetDevices(long orgId) => Ok(await _deviceService.GetDevicesByOrganization(orgId));
+        public async Task<IActionResult> GetDevices(long id) => Ok(await _deviceService.GetDevicesByOrganization(id));
 
         //[HttpGet("BySector/{id}")]
         //public async Task<IActionResult> GetDevicesBySector(long sectorId) => Ok(await _deviceService.GetDevicesByOrganization(orgId));
@@ -41,6 +42,8 @@ namespace SmartSence.Controllers
 
         [HttpPost("GetDeviceSummary")]
         public async Task<IActionResult> GetDeviceSummary(DashboardFilter filter) => Ok(await _deviceService.GetDeviceSummary(filter));
+
+        
 
     }
 }

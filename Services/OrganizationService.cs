@@ -10,6 +10,7 @@ using SmartSence.DTO.Identity;
 using SmartSence.Extensions;
 using SmartSence.Wrappers;
 using System.Linq.Dynamic.Core;
+using System.Security.Cryptography;
 
 
 namespace SmartSence.Services
@@ -39,11 +40,26 @@ namespace SmartSence.Services
             _unitOfWork = unitOfWork;
         }
 
+        //Task<List<LiteEntityDto>> IOrganizationService.GetAllOrganizations()
 
-        public async Task<Wrappers.Result<List<OrganizationDto>>> GetAllOrganizations()
+        public async Task<Wrappers.Result<List<LiteEntityDto>>> GetAllOrganizations()
         {
             var orgs = await _organizationRepository.GetAllAsync();
-            return await Result<List<OrganizationDto>>.SuccessAsync(_mapper.Map<List<OrganizationDto>>(orgs));
+            return await Result<List<LiteEntityDto>>.SuccessAsync(_mapper.Map<List<LiteEntityDto>>(orgs));
+        }
+
+        public async Task<Wrappers.Result<List<LiteEntityDto>>> GetAllSectorsLite(long orgId)
+        {
+            var orgs = await _sectorRepository.GetAllAsync();
+            orgs = orgs.Where(s => s.Orgid == orgId).ToList();
+            return await Result<List<LiteEntityDto>>.SuccessAsync(_mapper.Map<List<LiteEntityDto>>(orgs));
+        }
+
+        public async Task<Wrappers.Result<List<LiteEntityDto>>> GetAllBlocksLite(long sectorId)
+        {
+            var orgs = await _blockRepository.GetAllAsync();
+            orgs = orgs.Where(s => s.Sectorid == sectorId).ToList();
+            return await Result<List<LiteEntityDto>>.SuccessAsync(_mapper.Map<List<LiteEntityDto>>(orgs));
         }
 
         public async Task<PaginatedResult<OrganizationDto>> GetAllAsync(int pageNumber, int pageSize, string sortField, string sortOrder, string searchText)
@@ -219,5 +235,12 @@ namespace SmartSence.Services
             return await Result<List<BuildingFloorDto>>.SuccessAsync(_mapper.Map<List<BuildingFloorDto>>(buildingFloors));
         }
 
+        public Task<List<LiteEntityDto>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+       
+        
     }
 }

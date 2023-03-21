@@ -9,6 +9,7 @@ namespace JobHunt.Mappings
         public OrganizationProfile()
         {
             CreateMap<OrganizationDto, Organization>().ReverseMap();
+            CreateMap<LiteEntityDto, Organization>().ReverseMap();
         }
     }
 }
