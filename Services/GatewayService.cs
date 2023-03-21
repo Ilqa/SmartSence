@@ -66,8 +66,8 @@ namespace SmartSence.Services
             var summary = new DashboardSummary
             {
                 EntityType = "Gateway",
-                OnlineEntites = 13,
-                OfflineEntities = 2
+                OnlineEntites = filter.OrgId == 1 ? 3 : 0,
+                OfflineEntities = 0
             };
 
             return await Result<DashboardSummary>.SuccessAsync(summary);

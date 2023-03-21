@@ -93,11 +93,12 @@ namespace SmartSence.Services
 
         public async Task<Result<DashboardSummary>> GetDeviceSummary(DashboardFilter filter)
         {
+            
             var summary = new DashboardSummary
             {
                 EntityType = "Device",
-                OnlineEntites = 25,
-                OfflineEntities = 3
+                OnlineEntites = filter.OrgId == 1? 2:0,
+                OfflineEntities = 0
             };
 
             return await Result<DashboardSummary>.SuccessAsync(summary);
