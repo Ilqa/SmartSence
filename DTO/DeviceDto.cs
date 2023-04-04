@@ -1,7 +1,10 @@
-﻿using SmartSence.Database.Entities;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using Newtonsoft.Json.Converters;
+using SmartSence.Database.Entities;
 using SmartSence.Databse.Entities;
 using SmartSence.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace SmartSence.DTO
 {
@@ -19,9 +22,10 @@ namespace SmartSence.DTO
 
         public string Devicetype { get; set; } 
 
-        public string Manufacturer { get; set; } 
+        public string Manufacturer { get; set; }
 
         // public BitArray Isactive { get; set; }
+        //[JsonConverter(typeof(StringEnumConverter))]
         public StatusEnum Status { get; set; }
 
         public long? BuildingFloorId { get; set; }
