@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SmartSence.Database;
@@ -11,9 +12,11 @@ using SmartSence.Database;
 namespace SmartSence.Migrations
 {
     [DbContext(typeof(SmartSenceContext))]
-    partial class SmartSenceContextModelSnapshot : ModelSnapshot
+    [Migration("20230407205923_CreateTelemetryTableFunction")]
+    partial class CreateTelemetryTableFunction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -164,53 +167,6 @@ namespace SmartSence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DeviceTelemetryJsons");
-                });
-
-            modelBuilder.Entity("SmartSence.Database.Entities.DeviceType", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("AppEui")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DeviceTypes");
-                });
-
-            modelBuilder.Entity("SmartSence.Database.Entities.DeviceTypeColumn", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("DataType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<long?>("DeviceTypeId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DeviceTypeId");
-
-                    b.ToTable("DeviceTypeColumns");
                 });
 
             modelBuilder.Entity("SmartSence.Database.Entities.Gateway", b =>
@@ -664,13 +620,6 @@ namespace SmartSence.Migrations
                     b.Navigation("Building");
                 });
 
-            modelBuilder.Entity("SmartSence.Database.Entities.DeviceTypeColumn", b =>
-                {
-                    b.HasOne("SmartSence.Database.Entities.DeviceType", null)
-                        .WithMany("DeviceTypeColumns")
-                        .HasForeignKey("DeviceTypeId");
-                });
-
             modelBuilder.Entity("SmartSence.Database.Entities.Gateway", b =>
                 {
                     b.HasOne("SmartSence.Databse.Entities.Organization", "Org")
@@ -749,11 +698,6 @@ namespace SmartSence.Migrations
             modelBuilder.Entity("SmartSence.Database.Entities.BuildingFloor", b =>
                 {
                     b.Navigation("DeviceInfos");
-                });
-
-            modelBuilder.Entity("SmartSence.Database.Entities.DeviceType", b =>
-                {
-                    b.Navigation("DeviceTypeColumns");
                 });
 
             modelBuilder.Entity("SmartSence.Databse.Entities.Block", b =>

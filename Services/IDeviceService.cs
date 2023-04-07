@@ -20,6 +20,7 @@ namespace SmartSence.Services
         Task<IResult> SaveDeviceTelemetry(DeviceTelemetryDto telemetry);
 
         Task<Result<DashboardSummary>> GetDeviceSummary(DashboardFilter filter);
+        Task<Result<string>> RegidterDeviceType(DeviceTypeDto deviceType);
 
     }
 }

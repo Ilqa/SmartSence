@@ -43,7 +43,10 @@ namespace SmartSence.Controllers
         [HttpPost("GetDeviceSummary")]
         public async Task<IActionResult> GetDeviceSummary(DashboardFilter filter) => Ok(await _deviceService.GetDeviceSummary(filter));
 
-        
+        [HttpPost("RegisterDeviceType")]
+        public async Task<IActionResult> RegisterDeviceType(DeviceTypeDto deviceType) => Ok(await _deviceService.RegidterDeviceType(deviceType));
+
+
 
     }
 }

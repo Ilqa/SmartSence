@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 //using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using SmartSence.Database;
 using SmartSence.Database.Entities;
 using SmartSence.Database.Repositories;
 using SmartSence.Databse.Entities;
@@ -14,19 +15,23 @@ namespace SmartSence.Services
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepositoryAsync<DeviceInfo> _repositoryAsync;
+        private readonly IRepositoryAsync<DeviceType> _deviceTypeRepo;
         private readonly IRepositoryAsync<DeviceTelemetry> _telemetryRepo;
         private readonly IRepositoryAsync<DeviceTelemetryJson> _telemetryJsonRepo;
+        private readonly SmartSenceContext _context;
 
 
 
 
-        public DeviceService( IMapper mapper, IUnitOfWork unitOfWork, IRepositoryAsync<DeviceInfo> repositoryAsync, IRepositoryAsync<DeviceTelemetry> telemetryRepo, IRepositoryAsync<DeviceTelemetryJson> telemetryJsonRepo)
+        public DeviceService(IRepositoryAsync<DeviceType> deviceTypeRepo, SmartSenceContext dbContext, IMapper mapper, IUnitOfWork unitOfWork, IRepositoryAsync<DeviceInfo> repositoryAsync, IRepositoryAsync<DeviceTelemetry> telemetryRepo, IRepositoryAsync<DeviceTelemetryJson> telemetryJsonRepo)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _repositoryAsync = repositoryAsync;
             _telemetryRepo= telemetryRepo;
             _telemetryJsonRepo= telemetryJsonRepo;
+            _context = dbContext;
+            _deviceTypeRepo = deviceTypeRepo;
         }
 
         public async Task<Wrappers.IResult> AddDevice(DeviceDto device)
@@ -102,6 +107,27 @@ namespace SmartSence.Services
             };
 
             return await Result<DashboardSummary>.SuccessAsync(summary);
+        }
+
+        public async Task<Result<string>> RegidterDeviceType(DeviceTypeDto deviceType)
+        {
+            try
+            {
+                await _deviceTypeRepo.AddAsync(_mapper.Map<DeviceType>(deviceType));
+
+               // using var context = _context;
+                var tableName = "DeviceTelemetry_" + deviceType.Name.Replace(" ", "");
+                var columns = new List<string> { "Id", "Seqno", "AppEui", "Time", "Port", "DeviceId", "SerialNumber" };
+                var dataTypes = new List<string> { "serial primary key", "bigint", "text", "timestamp with time zone", "integer", "integer", "bigint" };
+                deviceType.DeviceTypeColumns.ForEach(col => { columns.Add(col.Name); dataTypes.Add(col.DataType); });
+
+                _context.Database.ExecuteSqlRaw("SELECT CreateTelemetryTable(@p0, @p1, @p2)", tableName, columns.ToArray(), dataTypes.ToArray());
+            }
+            catch(Exception ex) { return await Result<string>.FailAsync(ex.ToString()); }
+
+            await _unitOfWork.Commit();
+            return await Result<string>.SuccessAsync("Device Registered");           
+
         }
     }
 }
