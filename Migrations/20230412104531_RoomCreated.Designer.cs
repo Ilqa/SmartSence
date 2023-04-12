@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SmartSence.Database;
@@ -11,9 +12,11 @@ using SmartSence.Database;
 namespace SmartSence.Migrations
 {
     [DbContext(typeof(SmartSenceContext))]
-    partial class SmartSenceContextModelSnapshot : ModelSnapshot
+    [Migration("20230412104531_RoomCreated")]
+    partial class RoomCreated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -443,6 +446,9 @@ namespace SmartSence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<long?>("BuildingFloorId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
@@ -476,6 +482,8 @@ namespace SmartSence.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BuildingFloorId");
 
                     b.HasIndex("DeviceTypeId");
 
@@ -750,6 +758,10 @@ namespace SmartSence.Migrations
 
             modelBuilder.Entity("SmartSence.Databse.Entities.DeviceInfo", b =>
                 {
+                    b.HasOne("SmartSence.Database.Entities.BuildingFloor", "BuildingFloor")
+                        .WithMany()
+                        .HasForeignKey("BuildingFloorId");
+
                     b.HasOne("SmartSence.Database.Entities.DeviceType", "Devicetype")
                         .WithMany()
                         .HasForeignKey("DeviceTypeId")
@@ -760,15 +772,15 @@ namespace SmartSence.Migrations
                         .WithMany("DeviceInfos")
                         .HasForeignKey("Orgid");
 
-                    b.HasOne("SmartSence.Database.Entities.Room", "Room")
+                    b.HasOne("SmartSence.Database.Entities.Room", null)
                         .WithMany("DeviceInfos")
                         .HasForeignKey("RoomId");
+
+                    b.Navigation("BuildingFloor");
 
                     b.Navigation("Devicetype");
 
                     b.Navigation("Org");
-
-                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("SmartSence.Databse.Entities.DeviceTelemetry", b =>

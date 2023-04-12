@@ -25,7 +25,9 @@ public partial class SmartSenceContext : IdentityDbContext<User, UserRole, long>
     public virtual DbSet<DeviceTelemetry> DeviceTelemetries { get; set; }
 
     public virtual DbSet<DeviceTelemetryJson> DeviceTelemetryJsons { get; set; }
-    public virtual DbSet<Building> Houses { get; set; }
+    public virtual DbSet<Building> Building { get; set; }
+    public virtual DbSet<BuildingFloor> BuildingFloors { get; set; }
+    public virtual DbSet<Room> Rooms { get; set; }
 
     public virtual DbSet<Organization> Organizations { get; set; }
 

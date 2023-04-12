@@ -48,13 +48,13 @@ namespace SmartSence.Services
 
         public async Task<Result<List<DeviceDto>>> GetDevicesByFloor(long id)
         {
-            var devices = await _repositoryAsync.Entities.Where(s => s.BuildingFloorId == id).ToListAsync();
+            var devices = await _repositoryAsync.Entities.Where(s => s.RoomId == id).ToListAsync();
             return await Result<List<DeviceDto>>.SuccessAsync(_mapper.Map<List<DeviceDto>>(devices));
         }
 
         public async Task<Result<List<DeviceDto>>> GetDevicesByHouse(long id)
         {
-            var devices = await _repositoryAsync.Entities.Where(s => s.BuildingFloor.BuildingId == id).ToListAsync();
+            var devices = await _repositoryAsync.Entities.Where(s => s.Room.BuildingFloor.BuildingId == id).ToListAsync();
             return await Result<List<DeviceDto>>.SuccessAsync(_mapper.Map<List<DeviceDto>>(devices));
         }
 

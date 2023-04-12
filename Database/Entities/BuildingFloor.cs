@@ -13,6 +13,6 @@ namespace SmartSence.Database.Entities
         [ForeignKey(nameof(BuildingId))]
         public Building Building { get; set; }
 
-        public virtual ICollection<DeviceInfo> DeviceInfos { get; } = new List<DeviceInfo>();
+       // public virtual ICollection<DeviceInfo> DeviceInfos { get; } = new List<DeviceInfo>();
     }
 }
