@@ -10,7 +10,7 @@ namespace SmartSence.Mappings
         public DeviceTypeProfile()
         {
             CreateMap<DeviceTypeDto, DeviceType>().ReverseMap();
-            CreateMap<DeviceTypeColumnDto, DeviceTypeColumn>().ReverseMap();
+            CreateMap<DeviceTypeColumnDto, DeviceTypeMetaData>().ReverseMap();
         }
 
     }

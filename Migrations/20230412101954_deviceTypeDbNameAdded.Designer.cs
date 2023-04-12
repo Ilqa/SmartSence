@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SmartSence.Database;
@@ -11,9 +12,11 @@ using SmartSence.Database;
 namespace SmartSence.Migrations
 {
     [DbContext(typeof(SmartSenceContext))]
-    partial class SmartSenceContextModelSnapshot : ModelSnapshot
+    [Migration("20230412101954_deviceTypeDbNameAdded")]
+    partial class deviceTypeDbNameAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -217,7 +220,7 @@ namespace SmartSence.Migrations
 
                     b.HasIndex("DeviceTypeId");
 
-                    b.ToTable("DeviceTypeMetaData");
+                    b.ToTable("DeviceTypeColumns");
                 });
 
             modelBuilder.Entity("SmartSence.Database.Entities.Gateway", b =>
@@ -436,8 +439,9 @@ namespace SmartSence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<long>("DeviceTypeId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("Devicetype")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Manufacturer")
                         .IsRequired()
@@ -460,8 +464,6 @@ namespace SmartSence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BuildingFloorId");
-
-                    b.HasIndex("DeviceTypeId");
 
                     b.HasIndex("Orgid");
 
@@ -725,19 +727,11 @@ namespace SmartSence.Migrations
                         .WithMany("DeviceInfos")
                         .HasForeignKey("BuildingFloorId");
 
-                    b.HasOne("SmartSence.Database.Entities.DeviceType", "Devicetype")
-                        .WithMany()
-                        .HasForeignKey("DeviceTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SmartSence.Databse.Entities.Organization", "Org")
                         .WithMany("DeviceInfos")
                         .HasForeignKey("Orgid");
 
                     b.Navigation("BuildingFloor");
-
-                    b.Navigation("Devicetype");
 
                     b.Navigation("Org");
                 });

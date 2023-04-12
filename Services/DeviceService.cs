@@ -115,8 +115,8 @@ namespace SmartSence.Services
             {
                 await _deviceTypeRepo.AddAsync(_mapper.Map<DeviceType>(deviceType));
 
-               // using var context = _context;
-                var tableName = "DeviceTelemetry_" + deviceType.Name.Replace(" ", "");
+                // using var context = _context;
+                var tableName = deviceType.TelemetryDBName; //"DeviceTelemetry_" + deviceType.Name.Replace(" ", "");
                 var columns = new List<string> { "Id", "Seqno", "AppEui", "Time", "Port", "DeviceId", "SerialNumber" };
                 var dataTypes = new List<string> { "serial primary key", "bigint", "text", "timestamp with time zone", "integer", "integer", "bigint" };
                 deviceType.DeviceTypeColumns.ForEach(col => { columns.Add(col.Name); dataTypes.Add(col.DataType); });

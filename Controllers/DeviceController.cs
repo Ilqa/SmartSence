@@ -46,7 +46,8 @@ namespace SmartSence.Controllers
         [HttpPost("RegisterDeviceType")]
         public async Task<IActionResult> RegisterDeviceType(DeviceTypeDto deviceType) => Ok(await _deviceService.RegidterDeviceType(deviceType));
 
-
+        [HttpGet("MetaData_DataType")]
+        public async Task<IActionResult> MetaData_DataType() => Ok(new List<string>() { "integer", "bigint", "text", "timestamp with time zone" });
 
     }
 }

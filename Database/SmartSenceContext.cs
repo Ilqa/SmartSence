@@ -33,7 +33,7 @@ public partial class SmartSenceContext : IdentityDbContext<User, UserRole, long>
 
     public virtual DbSet<DeviceType> DeviceTypes { get; set; }
 
-    public virtual DbSet<DeviceTypeColumn> DeviceTypeColumns { get; set; }
+    public virtual DbSet<DeviceTypeMetaData> DeviceTypeMetaData { get; set; }
 
 
     //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -1,6 +1,7 @@
 ﻿using SmartSence.Database.Entities;
 
 using SmartSence.Enums;
+using SmartSence.Migrations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SmartSence.Databse.Entities;
@@ -17,7 +18,9 @@ public partial class DeviceInfo
 
     public string DeviceEUI { get; set; } = null!;
 
-    public string Devicetype { get; set; } = null!;
+    public Database.Entities.DeviceType Devicetype { get; set; }
+
+    public long DeviceTypeId { get; set; }
 
     public string Manufacturer { get; set; } = null!;
 
