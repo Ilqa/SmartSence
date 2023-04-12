@@ -18,9 +18,9 @@ namespace SmartSence.DTO
 
         public string Serialnumber { get; set; }
 
-        public string DeviceEUI { get; set; } 
+        public string DeviceEUI { get; set; }
 
-        public string Devicetype { get; set; } 
+        public long DeviceTypeId { get; set; }
 
         public string Manufacturer { get; set; }
 
