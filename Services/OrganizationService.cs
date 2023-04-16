@@ -23,11 +23,12 @@ namespace SmartSence.Services
         private readonly IRepositoryAsync<Block> _blockRepository;
         private readonly IRepositoryAsync<Building> _buildingRepository;
         private readonly IRepositoryAsync<BuildingFloor> _buildingFloorRepository;
+        private readonly IRepositoryAsync<Room> _roomRepository;
 
         private readonly IUnitOfWork _unitOfWork;
 
 
-        public OrganizationService(IRepositoryAsync<Organization> organizationRepository, IRepositoryAsync<BuildingFloor> buildingFloorRepository, IRepositoryAsync<Building> houseRepository, IRepositoryAsync<Sector> sectorRepository, IRepositoryAsync<Block> blockRepository, IMapper mapper, IUnitOfWork unitOfWork)
+        public OrganizationService(IRepositoryAsync<Room> roomRepository, IRepositoryAsync<Organization> organizationRepository, IRepositoryAsync<BuildingFloor> buildingFloorRepository, IRepositoryAsync<Building> houseRepository, IRepositoryAsync<Sector> sectorRepository, IRepositoryAsync<Block> blockRepository, IMapper mapper, IUnitOfWork unitOfWork)
         {
            
             _organizationRepository = organizationRepository;
@@ -38,29 +39,17 @@ namespace SmartSence.Services
             _buildingRepository = houseRepository;
             _buildingFloorRepository = buildingFloorRepository;
             _unitOfWork = unitOfWork;
+            _roomRepository= roomRepository;
         }
 
         //Task<List<LiteEntityDto>> IOrganizationService.GetAllOrganizations()
+        #region Organization
 
-        public async Task<Wrappers.Result<List<LiteEntityDto>>> GetAllOrganizations()
+        public async Task<Wrappers.Result<List<LiteEntityDto>>> GetAllOrganizationsLite()
         {
             var orgs = await _organizationRepository.GetAllAsync();
             return await Result<List<LiteEntityDto>>.SuccessAsync(_mapper.Map<List<LiteEntityDto>>(orgs));
-        }
-
-        public async Task<Wrappers.Result<List<LiteEntityDto>>> GetAllSectorsLite(long orgId)
-        {
-            var orgs = await _sectorRepository.GetAllAsync();
-            orgs = orgs.Where(s => s.Orgid == orgId).ToList();
-            return await Result<List<LiteEntityDto>>.SuccessAsync(_mapper.Map<List<LiteEntityDto>>(orgs));
-        }
-
-        public async Task<Wrappers.Result<List<LiteEntityDto>>> GetAllBlocksLite(long sectorId)
-        {
-            var orgs = await _blockRepository.GetAllAsync();
-            orgs = orgs.Where(s => s.Sectorid == sectorId).ToList();
-            return await Result<List<LiteEntityDto>>.SuccessAsync(_mapper.Map<List<LiteEntityDto>>(orgs));
-        }
+        }     
 
         public async Task<PaginatedResult<OrganizationDto>> GetAllAsync(int pageNumber, int pageSize, string sortField, string sortOrder, string searchText)
         {           
@@ -107,6 +96,15 @@ namespace SmartSence.Services
             throw new NotImplementedException();
         }
 
+        public async Task<Wrappers.Result<List<LiteEntityDto>>> GetAllSectorsLite(long orgId)
+        {
+            var orgs = await _sectorRepository.GetAllAsync();
+            orgs = orgs.Where(s => s.Orgid == orgId).ToList();
+            return await Result<List<LiteEntityDto>>.SuccessAsync(_mapper.Map<List<LiteEntityDto>>(orgs));
+        }
+#endregion
+
+        #region Sector
         public async Task<Wrappers.IResult> AddSector(SectorDto sector)
         {
             await _sectorRepository.AddAsync(_mapper.Map<Sector>(sector));
@@ -126,6 +124,8 @@ namespace SmartSence.Services
             return Result<long>.Success(sectorDb.Id, "Sector updated successfully");
         }
 
+
+
         public async Task<Wrappers.IResult> DeleteSector(long id)
         {
             var sector = await _sectorRepository.GetByIdAsync(id);
@@ -144,6 +144,15 @@ namespace SmartSence.Services
             var sectors = await _sectorRepository.Entities.Where(s => s.Orgid== orgId).ToListAsync();
             return await Result<List<SectorDto>>.SuccessAsync(_mapper.Map<List<SectorDto>>(sectors));
         }
+
+        public async Task<Result<List<SectorDto>>> GetAllSectors()
+        {
+            var sectors = await _sectorRepository.Entities.ToListAsync();
+            return await Result<List<SectorDto>>.SuccessAsync(_mapper.Map<List<SectorDto>>(sectors));
+        }
+#endregion
+
+        #region Block
 
         public async Task<Wrappers.IResult> AddBlock(BlockDto block)
         {
@@ -175,6 +184,21 @@ namespace SmartSence.Services
             return await Result<List<BlockDto>>.SuccessAsync(_mapper.Map<List<BlockDto>>(blocks));
         }
 
+        public async Task<Result<List<BlockDto>>> GetAllBlocks()
+        {
+            var blocks = await _blockRepository.Entities.ToListAsync();
+            return await Result<List<BlockDto>>.SuccessAsync(_mapper.Map<List<BlockDto>>(blocks));
+        }
+
+        public async Task<Wrappers.Result<List<LiteEntityDto>>> GetAllBlocksLite(long sectorId)
+        {
+            var orgs = await _blockRepository.GetAllAsync();
+            orgs = orgs.Where(s => s.Sectorid == sectorId).ToList();
+            return await Result<List<LiteEntityDto>>.SuccessAsync(_mapper.Map<List<LiteEntityDto>>(orgs));
+        }
+#endregion
+
+        #region Building
         public async Task<Wrappers.IResult> AddBuilding(BuildingDto building)
         {
             await _buildingRepository.AddAsync(_mapper.Map<Building>(building));
@@ -205,6 +229,21 @@ namespace SmartSence.Services
             return await Result<List<BuildingDto>>.SuccessAsync(_mapper.Map<List<BuildingDto>>(house));
         }
 
+        public async Task<Result<List<BuildingDto>>> GetAllBuildings()
+        {
+            var house = await _buildingRepository.Entities.ToListAsync();
+            return await Result<List<BuildingDto>>.SuccessAsync(_mapper.Map<List<BuildingDto>>(house));
+        }
+
+        public async Task<Result<List<LiteEntityDto>>> GetAllBuildingsLite(long blockId)
+        {
+            var orgs = await _buildingRepository.GetAllAsync();
+            orgs = orgs.Where(s => s.Blockid == blockId).ToList();
+            return await Result<List<LiteEntityDto>>.SuccessAsync(_mapper.Map<List<LiteEntityDto>>(orgs));
+        }
+        #endregion
+
+        #region Floor
         public async Task<Wrappers.IResult> AddBuildingFloor(BuildingFloorDto floor)
         {
             await _buildingFloorRepository.AddAsync(_mapper.Map<BuildingFloor>(floor));
@@ -235,12 +274,56 @@ namespace SmartSence.Services
             return await Result<List<BuildingFloorDto>>.SuccessAsync(_mapper.Map<List<BuildingFloorDto>>(buildingFloors));
         }
 
-        public Task<List<LiteEntityDto>> GetAllAsync()
+        public async Task<Result<List<BuildingFloorDto>>> GetAllBuildingFloors()
+        {
+            var buildingFloors = await _buildingFloorRepository.Entities.ToListAsync();
+            return await Result<List<BuildingFloorDto>>.SuccessAsync(_mapper.Map<List<BuildingFloorDto>>(buildingFloors));
+        }
+
+        public async Task<Result<List<LiteEntityDto>>> GetAllFloorsLite(long buildingId)
+        {
+            var orgs = await _buildingFloorRepository.GetAllAsync();
+            orgs = orgs.Where(s => s.BuildingId == buildingId).ToList();
+            return await Result<List<LiteEntityDto>>.SuccessAsync(_mapper.Map<List<LiteEntityDto>>(orgs));
+        }
+
+
+        #endregion
+
+        #region Rooms
+
+        public async Task<Wrappers.IResult> AddRoom(RoomDto room)
+        {
+            await _roomRepository.AddAsync(_mapper.Map<RoomDto, Room>(room));
+            await _unitOfWork.Commit();
+            return await Result.SuccessAsync("Block Added Successfully");
+        }
+
+        public Task<Wrappers.IResult> UpdateRoom(RoomDto room)
         {
             throw new NotImplementedException();
         }
 
+        public Task<Wrappers.IResult> DeleteRoom(long id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Result<List<RoomDto>>> GetAllRooms(long floorId)
+        {
+            var blocks = await _roomRepository.Entities.Where(s => s.BuildingFloorId == floorId).ToListAsync();
+            return await Result<List<RoomDto>>.SuccessAsync(_mapper.Map<List<RoomDto>>(blocks));
+        }
+
+        public async Task<Result<List<RoomDto>>> GetAllRooms()
+        {
+            var blocks = await _roomRepository.Entities.ToListAsync();
+            return await Result<List<RoomDto>>.SuccessAsync(_mapper.Map<List<RoomDto>>(blocks));
+        }
+
        
-        
+
+       
+        #endregion
     }
 }
