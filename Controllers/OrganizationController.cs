@@ -40,6 +40,9 @@ namespace SmartSence.Controllers
         [HttpPut("Organization")]
         public async Task<IActionResult> UpdateOrganization(OrganizationDto org) => Ok(await _orgService.UpdateOrganization(org));
 
+        [HttpPut("DeleteOrganization")]
+        public async Task<IActionResult> DeleteOrganization(long id) => Ok(await _orgService.DeleteOrganization(id));
+
 
 
 
@@ -61,6 +64,8 @@ namespace SmartSence.Controllers
         [HttpGet("SectorById/{id}")]
         public async Task<IActionResult> GetSectorById(long id) => Ok(await _orgService.GetSectorById(id));
 
+        [HttpPut("DeleteSector")]
+        public async Task<IActionResult> DeleteSector(long id) => Ok(await _orgService.DeleteSector(id));
 
 
 
@@ -83,6 +88,11 @@ namespace SmartSence.Controllers
         [HttpGet("BlockById/{id}")]
         public async Task<IActionResult> GetBlockById(long id) => Ok(await _orgService.GetBlockById(id));
 
+        [HttpPut("DeleteBlock")]
+        public async Task<IActionResult> DeleteBlock(long id) => Ok(await _orgService.DeleteBlock(id));
+
+
+
 
 
 
@@ -104,6 +114,8 @@ namespace SmartSence.Controllers
         [HttpGet("BuildingById/{id}")]
         public async Task<IActionResult> GetBuildingById(long id) => Ok(await _orgService.GetBuildingById(id));
 
+        [HttpPut("DeleteBuilding")]
+        public async Task<IActionResult> DeleteBuilding(long id) => Ok(await _orgService.DeleteBuilding(id));
 
 
 
@@ -124,5 +136,35 @@ namespace SmartSence.Controllers
 
         [HttpGet("FloorById/{id}")]
         public async Task<IActionResult> GetFloorById(long id) => Ok(await _orgService.GetFloorById(id));
+
+        [HttpPut("DeleteFloor")]
+        public async Task<IActionResult> DeleteFloor(long id) => Ok(await _orgService.DeleteBuildingFloor(id));
+
+
+
+
+
+
+
+        [HttpGet("Rooms/{floorId}")]
+        public async Task<IActionResult> GetAllRooms(long floorId) => Ok(await _orgService.GetAllRooms(floorId));
+
+        [HttpGet("AllRooms")]
+        public async Task<IActionResult> GetAllRooms() => Ok(await _orgService.GetAllRooms());
+
+        [HttpPost("Room")]
+        public async Task<IActionResult> AddRoom(RoomDto room) => Ok(await _orgService.AddRoom(room));
+
+        [HttpPut("Room")]
+        public async Task<IActionResult> UpdateRoom(RoomDto room) => Ok(await _orgService.UpdateRoom(room));
+
+        [HttpGet("AllRoomsLite/{Id}")]
+        public async Task<IActionResult> GetAllRoomsLite(long Id) => Ok(await _orgService.GetAllRoomsLite(Id));
+
+        [HttpGet("RoomById/{id}")]
+        public async Task<IActionResult> GetRoomById(long id) => Ok(await _orgService.GetRoomById(id));
+
+        [HttpPut("DeleteRoom")]
+        public async Task<IActionResult> DeleteRoom(long id) => Ok(await _orgService.DeleteRoom(id));
     }
 }

@@ -102,7 +102,14 @@ namespace SmartSence.Services
             orgs = orgs.Where(s => s.Orgid == orgId).ToList();
             return await Result<List<LiteEntityDto>>.SuccessAsync(_mapper.Map<List<LiteEntityDto>>(orgs));
         }
-#endregion
+        public async Task<Result<OrganizationDto>> GetOrganizationById(long id)
+        {
+            var org = await _organizationRepository.Entities.FirstOrDefaultAsync(s => s.Id == id);
+            if (org == null)
+                return await Result<OrganizationDto>.FailAsync("Organization not found");
+            return await Result<OrganizationDto>.SuccessAsync(_mapper.Map<OrganizationDto>(org));
+        }
+        #endregion
 
         #region Sector
         public async Task<Wrappers.IResult> AddSector(SectorDto sector)
@@ -150,7 +157,15 @@ namespace SmartSence.Services
             var sectors = await _sectorRepository.Entities.ToListAsync();
             return await Result<List<SectorDto>>.SuccessAsync(_mapper.Map<List<SectorDto>>(sectors));
         }
-#endregion
+        public async Task<Result<SectorDto>> GetSectorById(long id)
+        {
+            var org = await _sectorRepository.Entities.FirstOrDefaultAsync(s => s.Id == id);
+            if (org == null)
+                return await Result<SectorDto>.FailAsync("Sector not found");
+            return await Result<SectorDto>.SuccessAsync(_mapper.Map<SectorDto>(org));
+        }
+
+        #endregion
 
         #region Block
 
@@ -196,7 +211,15 @@ namespace SmartSence.Services
             orgs = orgs.Where(s => s.Sectorid == sectorId).ToList();
             return await Result<List<LiteEntityDto>>.SuccessAsync(_mapper.Map<List<LiteEntityDto>>(orgs));
         }
-#endregion
+        public async Task<Result<BlockDto>> GetBlockById(long id)
+        {
+            var org = await _blockRepository.Entities.FirstOrDefaultAsync(s => s.Id == id);
+            if (org == null)
+                return await Result<BlockDto>.FailAsync("Block not found");
+            return await Result<BlockDto>.SuccessAsync(_mapper.Map<BlockDto>(org));
+        }
+
+        #endregion
 
         #region Building
         public async Task<Wrappers.IResult> AddBuilding(BuildingDto building)
@@ -241,6 +264,15 @@ namespace SmartSence.Services
             orgs = orgs.Where(s => s.Blockid == blockId).ToList();
             return await Result<List<LiteEntityDto>>.SuccessAsync(_mapper.Map<List<LiteEntityDto>>(orgs));
         }
+
+        public async Task<Result<BuildingDto>> GetBuildingById(long id)
+        {
+            var org = await _buildingRepository.Entities.FirstOrDefaultAsync(s => s.Id == id);
+            if (org == null)
+                return await Result<BuildingDto>.FailAsync("Building not found");
+            return await Result<BuildingDto>.SuccessAsync(_mapper.Map<BuildingDto>(org));
+        }
+
         #endregion
 
         #region Floor
@@ -287,6 +319,13 @@ namespace SmartSence.Services
             return await Result<List<LiteEntityDto>>.SuccessAsync(_mapper.Map<List<LiteEntityDto>>(orgs));
         }
 
+        public async Task<Result<BuildingFloorDto>> GetFloorById(long id)
+        {
+            var org = await _buildingFloorRepository.Entities.FirstOrDefaultAsync(s => s.Id == id);
+            if (org == null)
+                return await Result<BuildingFloorDto>.FailAsync("Floor not found");
+            return await Result<BuildingFloorDto>.SuccessAsync(_mapper.Map<BuildingFloorDto>(org));
+        }
 
         #endregion
 
@@ -321,9 +360,34 @@ namespace SmartSence.Services
             return await Result<List<RoomDto>>.SuccessAsync(_mapper.Map<List<RoomDto>>(blocks));
         }
 
-       
+        public async Task<Result<RoomDto>> GetRoomById(long id)
+        {
+            var org = await _roomRepository.Entities.FirstOrDefaultAsync(s => s.Id == id);
+            if (org == null)
+                return await Result<RoomDto>.FailAsync("Organization not found");
+            return await Result<RoomDto>.SuccessAsync(_mapper.Map<RoomDto>(org));
+        }
 
-       
+        public async Task<Result<List<LiteEntityDto>>> GetAllRoomsLite(long floorId)
+        {
+            var rooms = await _roomRepository.GetAllAsync();
+            rooms = rooms.Where(s => s.BuildingFloorId == floorId).ToList();
+            return await Result<List<LiteEntityDto>>.SuccessAsync(_mapper.Map<List<LiteEntityDto>>(rooms));
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         #endregion
     }
 }
