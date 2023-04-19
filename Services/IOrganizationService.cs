@@ -60,6 +60,7 @@ namespace SmartSence.Services
         Task<IResult> DeleteRoom(long id);
         Task<Result<List<RoomDto>>> GetAllRooms(long floorId);
         Task<Result<List<RoomDto>>> GetAllRooms();
+        Task<object?> GetFloorById(long id);
         //Task<Result<List<LiteEntityDto>>> GetAllRoomsLite(long orgId);
 
     }
