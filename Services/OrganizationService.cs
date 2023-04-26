@@ -91,9 +91,16 @@ namespace SmartSence.Services
             return Result<long>.Success(orgDb.Id, "Organization updated successfully");
         }
 
-        public Task<Wrappers.IResult> DeleteOrganization(long id)
+        public async Task<Wrappers.IResult> DeleteOrganization(long id)
         {
-            throw new NotImplementedException();
+            var OrgDB = await _organizationRepository.Entities.FirstOrDefaultAsync(s => s.Id == id);
+            if (OrgDB == null)
+                return Result<long>.Fail($"Organization Not Found.");
+
+            OrgDB.IsDeleted = true;
+            await _organizationRepository.UpdateAsync(OrgDB);
+            await _unitOfWork.Commit();
+            return Result<long>.Success(id, "Organization deleted successfully");
         }
 
         public async Task<Wrappers.Result<List<LiteEntityDto>>> GetAllSectorsLite(long orgId)
@@ -139,8 +146,10 @@ namespace SmartSence.Services
             if (sector == null)
                 return Result<long>.Fail("No Sector Found");
 
-            //sector.IsDeleted = true;
-            //sector.DeletedOn = DateTime.UtcNow;
+           if( _blockRepository.Entities.Any(b => b.Sectorid == id))
+                return Result<long>.Fail("Sector has one or more blocks linked to it");
+
+            sector.IsDeleted = true;
             await _sectorRepository.UpdateAsync(sector);
             await _unitOfWork.Commit();
             return Result<long>.Success(sector.Id, "Sector deleted successfully");
@@ -188,9 +197,19 @@ namespace SmartSence.Services
             return Result<long>.Success(blockDb.Id, "Block updated successfully");
         }
 
-        public Task<Wrappers.IResult> DeleteBlock(long id)
+        public async Task<Wrappers.IResult> DeleteBlock(long id)
         {
-            throw new NotImplementedException();
+            var block = await _blockRepository.GetByIdAsync(id);
+            if (block == null)
+                return Result<long>.Fail("No block Found");
+
+            if (_buildingRepository.Entities.Any(b => b.Blockid == id))
+                return Result<long>.Fail("Block has one or more buildings linked to it");
+
+            block.IsDeleted = true;
+            await _blockRepository.UpdateAsync(block);
+            await _unitOfWork.Commit();
+            return Result<long>.Success(block.Id, "Block deleted successfully");
         }
 
         public async Task<Result<List<BlockDto>>> GetAllBlocks(long sectorId)
@@ -241,9 +260,19 @@ namespace SmartSence.Services
             return Result<long>.Success(houseDb.Id, "House updated successfully");
         }
 
-        public Task<Wrappers.IResult> DeleteBuilding(long id)
+        public async Task<Wrappers.IResult> DeleteBuilding(long id)
         {
-            throw new NotImplementedException();
+            var building = await _buildingRepository.GetByIdAsync(id);
+            if (building == null)
+                return Result<long>.Fail("No building Found");
+
+            if (_buildingFloorRepository.Entities.Any(b => b.BuildingId == id))
+                return Result<long>.Fail("Building has one or more floors linked to it");
+
+            building.IsDeleted = true;
+            await _buildingRepository.UpdateAsync(building);
+            await _unitOfWork.Commit();
+            return Result<long>.Success(building.Id, "Building deleted successfully");
         }
 
         public async Task<Result<List<BuildingDto>>> GetAllBuildings(long blockId)
@@ -297,7 +326,17 @@ namespace SmartSence.Services
 
         public async  Task<Wrappers.IResult> DeleteBuildingFloor(long id)
         {
-            throw new NotImplementedException();
+            var floor = await _buildingFloorRepository.GetByIdAsync(id);
+            if (floor == null)
+                return Result<long>.Fail("No floor Found");
+
+            if (_roomRepository.Entities.Any(b => b.BuildingFloorId == id))
+                return Result<long>.Fail("Floor has one or more rooms linked to it");
+
+            floor.IsDeleted = true;
+            await _buildingFloorRepository.UpdateAsync(floor);
+            await _unitOfWork.Commit();
+            return Result<long>.Success(floor.Id, "Floor deleted successfully");
         }
 
         public async  Task<Result<List<BuildingFloorDto>>> GetAllBuildingFloors(long buildingId)
@@ -343,9 +382,16 @@ namespace SmartSence.Services
             throw new NotImplementedException();
         }
 
-        public Task<Wrappers.IResult> DeleteRoom(long id)
+        public async Task<Wrappers.IResult> DeleteRoom(long id)
         {
-            throw new NotImplementedException();
+            var room = await _roomRepository.GetByIdAsync(id);
+            if (room == null)
+                return Result<long>.Fail("No room Found");
+
+            room.IsDeleted = true;
+            await _roomRepository.UpdateAsync(room);
+            await _unitOfWork.Commit();
+            return Result<long>.Success(room.Id, "Room deleted successfully");
         }
 
         public async Task<Result<List<RoomDto>>> GetAllRooms(long floorId)
@@ -374,19 +420,6 @@ namespace SmartSence.Services
             rooms = rooms.Where(s => s.BuildingFloorId == floorId).ToList();
             return await Result<List<LiteEntityDto>>.SuccessAsync(_mapper.Map<List<LiteEntityDto>>(rooms));
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         #endregion
     }
