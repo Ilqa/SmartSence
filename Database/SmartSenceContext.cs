@@ -20,7 +20,7 @@ public partial class SmartSenceContext : IdentityDbContext<User, UserRole, long>
 
     public virtual DbSet<Block> Blocks { get; set; }
 
-    public virtual DbSet<DeviceInfo> DeviceInfos { get; set; }
+    public virtual DbSet<Device> Devices { get; set; }
 
     public virtual DbSet<DeviceTelemetry> DeviceTelemetries { get; set; }
 

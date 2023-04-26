@@ -9,6 +9,8 @@
         public string Description { get; set; } = null!;
 
         public long Blockid { get; set; }
+        public long OrgId { get; set; }
+        public long SectorId { get; set; }
 
         public string Address { get; set; } = null!;
 

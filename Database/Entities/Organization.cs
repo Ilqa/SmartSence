@@ -28,9 +28,11 @@ public partial class Organization
 
     public string Webaddress { get; set; } = null!;
 
-    public virtual ICollection<DeviceInfo> DeviceInfos { get; } = new List<DeviceInfo>();
+    public virtual ICollection<Device> DeviceInfos { get; } = new List<Device>();
 
     public virtual ICollection<Gateway> Gateways { get; } = new List<Gateway>();
 
     public virtual ICollection<Sector> Sectors { get; } = new List<Sector>();
+
+    public bool IsDeleted { get; set; }
 }

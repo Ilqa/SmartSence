@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SmartSence.Database;
@@ -11,9 +12,11 @@ using SmartSence.Database;
 namespace SmartSence.Migrations
 {
     [DbContext(typeof(SmartSenceContext))]
-    partial class SmartSenceContextModelSnapshot : ModelSnapshot
+    [Migration("20230426202739_AddAllIdsInEntities")]
+    partial class AddAllIdsInEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -150,9 +153,6 @@ namespace SmartSence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -201,9 +201,6 @@ namespace SmartSence.Migrations
                     b.Property<string>("AppEui")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -259,9 +256,6 @@ namespace SmartSence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -304,9 +298,6 @@ namespace SmartSence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -347,9 +338,6 @@ namespace SmartSence.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
                     b.Property<bool>("LockoutEnabled")
@@ -451,9 +439,6 @@ namespace SmartSence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -490,9 +475,6 @@ namespace SmartSence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -510,7 +492,7 @@ namespace SmartSence.Migrations
                     b.ToTable("Building");
                 });
 
-            modelBuilder.Entity("SmartSence.Databse.Entities.Device", b =>
+            modelBuilder.Entity("SmartSence.Databse.Entities.DeviceInfo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -528,9 +510,6 @@ namespace SmartSence.Migrations
 
                     b.Property<long>("DeviceTypeId")
                         .HasColumnType("bigint");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Manufacturer")
                         .IsRequired()
@@ -561,7 +540,7 @@ namespace SmartSence.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("Devices");
+                    b.ToTable("DeviceInfos");
                 });
 
             modelBuilder.Entity("SmartSence.Databse.Entities.DeviceTelemetry", b =>
@@ -598,9 +577,6 @@ namespace SmartSence.Migrations
                     b.Property<string>("GatewayRx")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
 
                     b.Property<int>("Port")
                         .HasColumnType("integer");
@@ -641,9 +617,6 @@ namespace SmartSence.Migrations
                     b.Property<string>("Inventorydescription")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Logo")
                         .IsRequired()
@@ -693,9 +666,6 @@ namespace SmartSence.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -835,7 +805,7 @@ namespace SmartSence.Migrations
                     b.Navigation("Block");
                 });
 
-            modelBuilder.Entity("SmartSence.Databse.Entities.Device", b =>
+            modelBuilder.Entity("SmartSence.Databse.Entities.DeviceInfo", b =>
                 {
                     b.HasOne("SmartSence.Database.Entities.DeviceType", "Devicetype")
                         .WithMany()
@@ -860,7 +830,7 @@ namespace SmartSence.Migrations
 
             modelBuilder.Entity("SmartSence.Databse.Entities.DeviceTelemetry", b =>
                 {
-                    b.HasOne("SmartSence.Databse.Entities.Device", "Device")
+                    b.HasOne("SmartSence.Databse.Entities.DeviceInfo", "Device")
                         .WithMany("DeviceTelemetries")
                         .HasForeignKey("Deviceid");
 
@@ -893,7 +863,7 @@ namespace SmartSence.Migrations
                     b.Navigation("Houses");
                 });
 
-            modelBuilder.Entity("SmartSence.Databse.Entities.Device", b =>
+            modelBuilder.Entity("SmartSence.Databse.Entities.DeviceInfo", b =>
                 {
                     b.Navigation("DeviceTelemetries");
                 });

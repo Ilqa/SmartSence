@@ -8,7 +8,7 @@ namespace JobHunt.Mappings
     {
         public DeviceProfile()
         {
-            CreateMap<DeviceDto, DeviceInfo>().ReverseMap();
+            CreateMap<DeviceDto, Device>().ReverseMap();
             CreateMap<DeviceTelemetryDto, DeviceTelemetry>()
                 .ForMember(dest => dest.DeviceTx, opt => opt.MapFrom(src => src.DeviceTx.ToString()))
                 .ForMember(dest => dest.Data, opt => opt.MapFrom(src => src.Data.ToString()))

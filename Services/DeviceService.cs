@@ -14,7 +14,7 @@ namespace SmartSence.Services
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IRepositoryAsync<DeviceInfo> _repositoryAsync;
+        private readonly IRepositoryAsync<Device> _repositoryAsync;
         private readonly IRepositoryAsync<DeviceType> _deviceTypeRepo;
         private readonly IRepositoryAsync<DeviceTelemetry> _telemetryRepo;
         private readonly IRepositoryAsync<DeviceTelemetryJson> _telemetryJsonRepo;
@@ -23,7 +23,7 @@ namespace SmartSence.Services
 
 
 
-        public DeviceService(IRepositoryAsync<DeviceType> deviceTypeRepo, SmartSenceContext dbContext, IMapper mapper, IUnitOfWork unitOfWork, IRepositoryAsync<DeviceInfo> repositoryAsync, IRepositoryAsync<DeviceTelemetry> telemetryRepo, IRepositoryAsync<DeviceTelemetryJson> telemetryJsonRepo)
+        public DeviceService(IRepositoryAsync<DeviceType> deviceTypeRepo, SmartSenceContext dbContext, IMapper mapper, IUnitOfWork unitOfWork, IRepositoryAsync<Device> repositoryAsync, IRepositoryAsync<DeviceTelemetry> telemetryRepo, IRepositoryAsync<DeviceTelemetryJson> telemetryJsonRepo)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -36,7 +36,7 @@ namespace SmartSence.Services
 
         public async Task<Wrappers.IResult> AddDevice(DeviceDto device)
         {
-            await _repositoryAsync.AddAsync(_mapper.Map<DeviceInfo>(device));
+            await _repositoryAsync.AddAsync(_mapper.Map<Device>(device));
             await _unitOfWork.Commit();
             return await Result.SuccessAsync("Device Added Successfully");
         }

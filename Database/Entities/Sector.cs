@@ -28,4 +28,6 @@ public partial class Sector
     public virtual ICollection<Block> Blocks { get; } = new List<Block>();
 
     public virtual Organization Org { get; set; } = null!;
+
+    public bool IsDeleted { get; set; }
 }

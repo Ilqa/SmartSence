@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SmartSence.Databse.Entities;
 
-public partial class DeviceInfo
+public partial class Device
 {
     public int Id { get; set; }
 
@@ -37,5 +37,7 @@ public partial class DeviceInfo
     public long? Orgid { get; set; }
     public virtual Organization? Org { get; set; }
 
-   
+    public bool IsDeleted { get; set; }
+
+
 }

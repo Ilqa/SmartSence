@@ -13,5 +13,7 @@ namespace SmartSence.Database.Entities
 
         public long? Orgid { get; set; }
         public virtual Organization? Org { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

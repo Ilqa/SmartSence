@@ -8,6 +8,8 @@
 
         public string TelemetryDBName { get; set; }
         public List<DeviceTypeMetaData> DeviceTypeColumns { get; set; } = new();
+
+        public bool IsDeleted { get; set; }
     }
 
     public class DeviceTypeMetaData

@@ -21,11 +21,14 @@ public partial class DeviceTelemetry
 
     public string DeviceType { get; set; }
 
-    public virtual DeviceInfo? Device { get; set; }
+    public virtual Device? Device { get; set; }
 
     public string DeviceEui { get; set; }
 
     public string DeviceTx { get; set; } 
 
-    public string GatewayRx { get; set; } 
+    public string GatewayRx { get; set; }
+
+    public bool IsDeleted { get; set; }
 }
+

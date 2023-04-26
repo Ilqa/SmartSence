@@ -9,6 +9,7 @@
         public string Description { get; set; } = null!;
 
         public long Sectorid { get; set; }
+        public long OrgId { get; set; }
 
         public string Logo { get; set; } = null!;
 

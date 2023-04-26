@@ -14,6 +14,8 @@ namespace SmartSence.Database.Entities
         public long? OrganizationId { get; set; }
         public bool IsActive { get; set; }
 
+        public bool IsDeleted { get; set; }
+
 
         //public string CreatedBy { get; set; }
         //public DateTime CreatedOn { get; set; }

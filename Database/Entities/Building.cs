@@ -12,14 +12,12 @@ public partial class Building
     public string Description { get; set; } = null!;
 
     public long Blockid { get; set; }
-
+    public long OrgId { get; set; }
+    public long SectorId { get; set; }
     public string Address { get; set; } = null!;
-
-    //public string Coordinates { get; set; } = null!;
-
-    //public string Noofdevices { get; set; } = null!;
-
     public virtual Block Block { get; set; } = null!;
 
-   // public virtual ICollection<DeviceInfo> DeviceInfos { get; } = new List<DeviceInfo>();
+    public bool IsDeleted { get; set; }
+
+
 }
