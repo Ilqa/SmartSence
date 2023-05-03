@@ -246,19 +246,19 @@ namespace SmartSence.Services
         {
             await _buildingRepository.AddAsync(_mapper.Map<Building>(building));
             await _unitOfWork.Commit();
-            return await Result.SuccessAsync("House Added Successfully");
+            return await Result.SuccessAsync("Building Added Successfully");
         }
 
         public async Task<Wrappers.IResult> UpdateBuilding(BuildingDto building)
         {
             var houseDb = await _buildingRepository.Entities.FirstOrDefaultAsync(s => s.Id == building.Id);
             if (houseDb == null)
-                return Result<long>.Fail($"House Not Found.");
+                return Result<long>.Fail($"Building Not Found.");
 
             houseDb = _mapper.Map(building, houseDb);
             await _buildingRepository.UpdateAsync(houseDb);
             await _unitOfWork.Commit();
-            return Result<long>.Success(houseDb.Id, "House updated successfully");
+            return Result<long>.Success(houseDb.Id, "Building updated successfully");
         }
 
         public async Task<Wrappers.IResult> DeleteBuilding(long id)

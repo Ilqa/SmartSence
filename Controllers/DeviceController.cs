@@ -25,6 +25,12 @@ namespace SmartSence.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateDevice(DeviceDto device) => Ok(await _deviceService.UpdateDevice(device));
 
+        [HttpGet("AllDevices")]
+        public async Task<IActionResult> GetAllDevices() => Ok(await _deviceService.GetAllDevices());
+
+        [HttpGet("DeviceById/{id}")]
+        public async Task<IActionResult> GetDeviceById(long id) => Ok(await _deviceService.GetDeviceById(id));
+
         [HttpGet("ByOrganization/{id}")]
         public async Task<IActionResult> GetDevices(long id) => Ok(await _deviceService.GetDevicesByOrganization(id));
 
@@ -32,7 +38,7 @@ namespace SmartSence.Controllers
         //public async Task<IActionResult> GetDevicesBySector(long sectorId) => Ok(await _deviceService.GetDevicesByOrganization(orgId));
 
         [HttpGet("ByBuilding/{id}")]
-        public async Task<IActionResult> GetDevicesByBuildingId(long houseId) => Ok(await _deviceService.GetDevicesByHouse(houseId));
+        public async Task<IActionResult> GetDevicesByBuildingId(long houseId) => Ok(await _deviceService.GetDevicesByBuilding(houseId));
 
         [HttpGet("ByFloor/{id}")]
         public async Task<IActionResult> GetDevicesByHouseId(long houseId) => Ok(await _deviceService.GetDevicesByFloor(houseId));
@@ -48,6 +54,9 @@ namespace SmartSence.Controllers
 
         [HttpGet("MetaData_DataType")]
         public async Task<IActionResult> MetaData_DataType() => Ok(new List<string>() { "integer", "bigint", "text", "timestamp with time zone" });
+
+        [HttpPut("DeleteDevice")]
+        public async Task<IActionResult> DeleteDevice(long id) => Ok(await _deviceService.DeleteDevice(id));
 
     }
 }

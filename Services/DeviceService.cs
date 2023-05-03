@@ -20,9 +20,6 @@ namespace SmartSence.Services
         private readonly IRepositoryAsync<DeviceTelemetryJson> _telemetryJsonRepo;
         private readonly SmartSenceContext _context;
 
-
-
-
         public DeviceService(IRepositoryAsync<DeviceType> deviceTypeRepo, SmartSenceContext dbContext, IMapper mapper, IUnitOfWork unitOfWork, IRepositoryAsync<Device> repositoryAsync, IRepositoryAsync<DeviceTelemetry> telemetryRepo, IRepositoryAsync<DeviceTelemetryJson> telemetryJsonRepo)
         {
             _mapper = mapper;
@@ -41,9 +38,16 @@ namespace SmartSence.Services
             return await Result.SuccessAsync("Device Added Successfully");
         }
 
-        public Task<Wrappers.IResult> DeleteDevice(DeviceDto device)
+        public async Task<Wrappers.IResult> DeleteDevice(long id)
         {
-            throw new NotImplementedException();
+            var device = await _repositoryAsync.GetByIdAsync(id);
+            if (device == null)
+                return Result<long>.Fail("No device Found");
+
+            device.IsDeleted = true;
+            await _repositoryAsync.UpdateAsync(device);
+            await _unitOfWork.Commit();
+            return Result<long>.Success(device.Id, "Device deleted successfully");
         }
 
         public async Task<Result<List<DeviceDto>>> GetDevicesByFloor(long id)
@@ -52,7 +56,7 @@ namespace SmartSence.Services
             return await Result<List<DeviceDto>>.SuccessAsync(_mapper.Map<List<DeviceDto>>(devices));
         }
 
-        public async Task<Result<List<DeviceDto>>> GetDevicesByHouse(long id)
+        public async Task<Result<List<DeviceDto>>> GetDevicesByBuilding(long id)
         {
             var devices = await _repositoryAsync.Entities.Where(s => s.Room.BuildingFloor.BuildingId == id).ToListAsync();
             return await Result<List<DeviceDto>>.SuccessAsync(_mapper.Map<List<DeviceDto>>(devices));
@@ -128,6 +132,18 @@ namespace SmartSence.Services
             await _unitOfWork.Commit();
             return await Result<string>.SuccessAsync("Device Registered");           
 
+        }
+
+        public async Task<Result<List<DeviceDto>>> GetAllDevices()
+        {
+            var devices = await _repositoryAsync.Entities.ToListAsync();
+            return await Result<List<DeviceDto>>.SuccessAsync(_mapper.Map<List<DeviceDto>>(devices));
+        }
+
+        public async Task<Result<DeviceDto>> GetDeviceById(long id)
+        {
+            var devices = await _repositoryAsync.Entities.FirstOrDefaultAsync(s => s.Id == id);
+            return await Result<DeviceDto>.SuccessAsync(_mapper.Map<DeviceDto>(devices));
         }
     }
 }
