@@ -10,7 +10,7 @@ namespace SmartSence.Database.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public string Image { get; set; }
-        public FloorEnum Floor { get; set; }
+        public FloorEnum FloorEnum { get; set; }
         public long BuildingId { get; set; }
         public long Blockid { get; set; }
         public long OrgId { get; set; }
@@ -18,7 +18,7 @@ namespace SmartSence.Database.Entities
 
         [ForeignKey(nameof(BuildingId))]
         public Building Building { get; set; }
-
+        public string Coordinates { get; set; }
         public bool IsDeleted { get; set; }
 
         // public virtual ICollection<DeviceInfo> DeviceInfos { get; } = new List<DeviceInfo>();

@@ -9,6 +9,7 @@ using SmartSence.DTO;
 using SmartSence.DTO.Identity;
 using SmartSence.Extensions;
 using SmartSence.Wrappers;
+using System.Drawing;
 using System.Linq.Dynamic.Core;
 using System.Security.Cryptography;
 
@@ -374,12 +375,19 @@ namespace SmartSence.Services
         {
             await _roomRepository.AddAsync(_mapper.Map<RoomDto, Room>(room));
             await _unitOfWork.Commit();
-            return await Result.SuccessAsync("Block Added Successfully");
+            return await Result.SuccessAsync("Room Added Successfully");
         }
 
-        public Task<Wrappers.IResult> UpdateRoom(RoomDto room)
+        public async Task<Wrappers.IResult> UpdateRoom(RoomDto room)
         {
-            throw new NotImplementedException();
+            var roomDb = await _roomRepository.Entities.FirstOrDefaultAsync(s => s.Id == room.Id);
+            if (roomDb == null)
+                return Result<long>.Fail($"room Not Found.");
+
+            roomDb = _mapper.Map(room, roomDb);
+            await _roomRepository.UpdateAsync(roomDb);
+            await _unitOfWork.Commit();
+            return Result<long>.Success(roomDb.Id, "Room updated successfully");
         }
 
         public async Task<Wrappers.IResult> DeleteRoom(long id)

@@ -17,6 +17,9 @@ public partial class Building
     public string Address { get; set; } = null!;
     public virtual Block Block { get; set; } = null!;
 
+    public string Coordinates { get; set; }
+
+
     public bool IsDeleted { get; set; }
 
 

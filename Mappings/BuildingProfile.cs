@@ -9,6 +9,7 @@ namespace JobHunt.Mappings
         public BuildingProfile()
         {
             CreateMap<BuildingDto, Building>().ReverseMap();
+            CreateMap<LiteEntityDto, Building>().ReverseMap();
         }
     }
 }
