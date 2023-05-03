@@ -49,14 +49,22 @@ namespace SmartSence.Controllers
         [HttpPost("GetDeviceSummary")]
         public async Task<IActionResult> GetDeviceSummary(DashboardFilter filter) => Ok(await _deviceService.GetDeviceSummary(filter));
 
+       
+
+        [HttpPut("DeleteDevice")]
+        public async Task<IActionResult> DeleteDevice(long id) => Ok(await _deviceService.DeleteDevice(id));
+
         [HttpPost("RegisterDeviceType")]
         public async Task<IActionResult> RegisterDeviceType(DeviceTypeDto deviceType) => Ok(await _deviceService.RegidterDeviceType(deviceType));
 
         [HttpGet("MetaData_DataType")]
         public async Task<IActionResult> MetaData_DataType() => Ok(new List<string>() { "integer", "bigint", "text", "timestamp with time zone" });
 
-        [HttpPut("DeleteDevice")]
-        public async Task<IActionResult> DeleteDevice(long id) => Ok(await _deviceService.DeleteDevice(id));
+        [HttpGet("AllDeviceTypes")]
+        public async Task<IActionResult> GetAllDeviceTypes() => Ok(await _deviceService.GetAllDeviceTypes());
+
+        [HttpGet("DeviceTypeById/{id}")]
+        public async Task<IActionResult> GetDeviceTypeById(long id) => Ok(await _deviceService.GetDeviceTypeById(id));
 
     }
 }

@@ -23,5 +23,8 @@ namespace SmartSence.Services
         Task<Result<string>> RegidterDeviceType(DeviceTypeDto deviceType);
         Task<Result<List<DeviceDto>>> GetAllDevices();
         Task<Result<DeviceDto>> GetDeviceById(long id);
+        Task<Result<List<DeviceTypeDto>>> GetAllDeviceTypes();
+
+        Task<Result<DeviceTypeDto>> GetDeviceTypeById(long id);
     }
 }
