@@ -8,6 +8,7 @@ using SmartSence.Database.Entities;
 using SmartSence.DTO;
 using SmartSence.DTO.Identity;
 using SmartSence.Extensions;
+using SmartSence.Migrations;
 using SmartSence.Wrappers;
 using System;
 using System.Collections.Generic;
@@ -65,7 +66,7 @@ namespace SmartSence.Services
         {
             var user = await _userManager.Users.Where(u => u.Id == AuthenticatedUserID).FirstOrDefaultAsync();
             var result = _mapper.Map<UserDto>(user);
-            result.UserRoles = _userManager.GetRolesAsync(user).Result.ToList();
+            result.Role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
             result.UserPermissions = AuthenticatedUserClaims.Where(c => c.Key == "Permission").Select(c => c.Value).ToList();
             return result;
         }
@@ -89,6 +90,14 @@ namespace SmartSence.Services
             //}
 
             return await userResponses;
+
+        }
+
+
+        public async Task<IResult<List<UserDto>>> GetAll(long? orgId)
+        {
+            var filteredUsers = orgId.HasValue ? _userManager.Users.Where(p => p.OrganizationId == orgId.Value).ToList() : _userManager.Users.ToList();
+            return await Result<List<UserDto>>.SuccessAsync(_mapper.Map<List<UserDto>>(filteredUsers));
 
         }
 
@@ -228,52 +237,118 @@ namespace SmartSence.Services
             return await Result<DashboardSummary>.SuccessAsync(summary);
         }
 
+        public async Task<Result<UserDto>> GetUserById(long userId)
+        {
+            var user = await _userManager.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
+            var result = _mapper.Map<UserDto>(user);
+            result.Role = _userManager.GetRolesAsync(user).Result.ToList().FirstOrDefault();
+            result.UserPermissions = AuthenticatedUserClaims.Where(c => c.Key == "Permission").Select(c => c.Value).ToList();
+            return await Result<UserDto>.SuccessAsync(result);
+        }
+
+        public async Task<IResult> UpdateUserAsync(UserDto request)
+        {
+            if (!string.IsNullOrWhiteSpace(request.PhoneNumber))
+            {
+                var userWithSamePhoneNumber = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == request.PhoneNumber && x.Id != userId);
+                if (userWithSamePhoneNumber != null)
+                    return await Result.FailAsync(string.Format("Phone number {0} is already used.",
+                        request.PhoneNumber));
+            }
+
+            var user = await _userManager.FindByIdAsync(request.Id.ToString());
+            if (user == null)
+            {
+                return await Result.FailAsync("User Not Found.");
+            }
+            //user.UserName = request.UserName;
+            user.PhoneNumber = request.PhoneNumber;
+            //user.Email = request.Email;
+            //user.FirstName = request.FirstName;
+            //user.LastName = request.LastName;
+
+            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            if (request.PhoneNumber != phoneNumber)
+            {
+                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, request.PhoneNumber);
+            }
+            var identityResult = await _userManager.UpdateAsync(user);
+            var errors = identityResult.Errors.Select(e => e.Description.ToString()).ToList();
+            await _signInManager.RefreshSignInAsync(user);
 
 
+            if (identityResult.Succeeded)
+            {
+                await UpdateRoleAsync(request.Id, request.Role);
+                return await Result.SuccessAsync("Profile updated successfully!");
+            }
+
+            return await Result.FailAsync(errors);
+        }
+
+        public async Task<IResult> UpdateRoleAsync(long userId, string role)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            //var currentUser = await _userManager.FindByIdAsync(_currentUserService.UserId);
+            //if (!await _userManager.IsInRoleAsync(currentUser, RoleConstants.AdministratorRole))
+            //{
+            //    var userHasAdministratorRole = roles.Any(x => x == RoleConstants.AdministratorRole);
+            //    if (role.Equals(RoleConstants.AdministratorRole) && !userHasAdministratorRole || !role.Equals(RoleConstants.AdministratorRole) && userHasAdministratorRole)
+            //        return await Result.FailAsync("Not Allowed to add or delete Administrator Role if you have not this role.");
+            //}
+
+            await _userManager.RemoveFromRolesAsync(user, roles);
+            await _userManager.AddToRoleAsync(user, role);
+            return await Result.SuccessAsync("Role Updated");
+        }
 
 
-        //public async Task<IResult<string>> CreateUser(CreateUpdateUserRequest request)
-        //{
-        //    var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
-        //    if (userWithSameUserName != null && !userWithSameUserName.IsDeleted)
-        //        return await Result<string>.FailAsync(string.Format("Username {0} is already taken.", request.UserName));
+        public async Task<IResult<long>> CreateUser(UserDto request)
+        {
+            var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
+            if (userWithSameUserName != null && !userWithSameUserName.IsDeleted)
+                return await Result<long>.FailAsync(string.Format("Username {0} is already taken.", request.UserName));
 
-        //    var user = new ApplicationUser
-        //    {
-        //        Email = request.Email,
-        //        UserName = request.UserName,
-        //        PhoneNumber = request.PhoneNumber,
-        //        FirstName = request.FirstName,
-        //        LastName = request.LastName
-        //    };
+            var user = new User
+            {
+                Email = request.Email,
+                UserName = request.UserName,
+                PhoneNumber = request.PhoneNumber,
+                //Address = request.Address
+                //FirstName = request.FirstName,
+                //LastName = request.LastName
+            };
 
-        //    if (!string.IsNullOrWhiteSpace(request.PhoneNumber))
-        //    {
-        //        var userWithSamePhoneNumber = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == request.PhoneNumber);
-        //        if (userWithSamePhoneNumber != null && !userWithSamePhoneNumber.IsDeleted)
-        //            return await Result<string>.FailAsync( string.Format("Phone number {0} is already registered.", request.PhoneNumber));
-        //    }
+            if (!string.IsNullOrWhiteSpace(request.PhoneNumber))
+            {
+                var userWithSamePhoneNumber = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == request.PhoneNumber);
+                if (userWithSamePhoneNumber != null && !userWithSamePhoneNumber.IsDeleted)
+                    return await Result<long>.FailAsync(string.Format("Phone number {0} is already registered.", request.PhoneNumber));
+            }
 
-        //    var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
-        //    if (userWithSameEmail != null && !userWithSameEmail.IsDeleted)
-        //        return await Result<string>.FailAsync(string.Format("Email {0} is already registered.", request.Email));
+            var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
+            if (userWithSameEmail != null && !userWithSameEmail.IsDeleted)
+                return await Result<long>.FailAsync(string.Format("Email {0} is already registered.", request.Email));
 
-        //    var result = await _userManager.CreateAsync(user);
-        //    if (!result.Succeeded)
-        //        return await Result<string>.FailAsync(result.Errors.Select(a => a.Description.ToString()).ToList());
+            var result = await _userManager.CreateAsync(user);
+            if (!result.Succeeded)
+                return await Result<long>.FailAsync(result.Errors.Select(a => a.Description.ToString()).ToList());
 
-        //    await _userManager.AddToRoleAsync(user, "Biller");
-        //    var passwordSetUri = await GetPasswordSetToken(user, request.IsRequestFromClientApp);
-        //    var mailRequest = new MailRequest
-        //    {
-        //        To = user.Email,
-        //        Body = $"Please confirm your account and set password by <a href='{passwordSetUri}'>clicking here</a>.",
-        //        Subject = "Confirm Registration and Set Password"
-        //    };
-        //    _mailService.SendAsync(mailRequest);
-        //    return await Result<string>.SuccessAsync(user.Id, string.Format("User {0} Registered. Please check Mailbox to verify!", user.UserName));
+            await _userManager.AddToRoleAsync(user, request.Role);
+            //var passwordSetUri = await GetPasswordSetToken(user, request.IsRequestFromClientApp);
+            //var mailRequest = new MailRequest
+            //{
+            //    To = user.Email,
+            //    Body = $"Please confirm your account and set password by <a href='{passwordSetUri}'>clicking here</a>.",
+            //    Subject = "Confirm Registration and Set Password"
+            //};
+            //_mailService.SendAsync(mailRequest);
+            return await Result<long>.SuccessAsync(user.Id, string.Format("User {0} Registered. Please check Mailbox to verify!", user.UserName));
 
-        //}
+        }
 
         //private async Task<string> SendVerificationEmail(ApplicationUser user, string origin)
         //{
@@ -370,24 +445,7 @@ namespace SmartSence.Services
         //}
 
 
-        //public async Task<IResult> UpdateRoleAsync(string userId, string role)
-        //{
-        //    var user = await _userManager.FindByIdAsync(userId);
-
-        //    var roles = await _userManager.GetRolesAsync(user);
-
-        //    var currentUser = await _userManager.FindByIdAsync(_currentUserService.UserId);
-        //    if (!await _userManager.IsInRoleAsync(currentUser, RoleConstants.AdministratorRole))
-        //    {
-        //        var userHasAdministratorRole = roles.Any(x => x == RoleConstants.AdministratorRole);
-        //        if (role.Equals(RoleConstants.AdministratorRole) && !userHasAdministratorRole || !role.Equals(RoleConstants.AdministratorRole) && userHasAdministratorRole)
-        //            return await Result.FailAsync("Not Allowed to add or delete Administrator Role if you have not this role.");
-        //    }
-
-        //    await _userManager.RemoveFromRolesAsync(user, roles);
-        //    await _userManager.AddToRoleAsync(user, role);
-        //    return await Result.SuccessAsync("Role Updated");
-        //}
+        
 
         //public async Task<IResult<string>> ConfirmEmailAsync(string userId, string code)
         //{

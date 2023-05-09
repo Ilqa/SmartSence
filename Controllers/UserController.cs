@@ -19,10 +19,35 @@ namespace JobHunt.Controllers.Identity
 
 
         //[Authorize(Policy = Permissions.Users.View)]
+        //[HttpGet]
+        //public async Task<IActionResult> GetAll(int? pageNumber, int? pageSize, string sortField, string sortOrder, string searchText, long? orgId)
+        //{
+        //    return Ok(await _userService.GetAllAsync(pageNumber ?? 1, pageSize ?? 10, sortField ?? "UserName", sortOrder ?? "ASC", searchText ?? "", orgId));
+        //}
+
         [HttpGet]
-        public async Task<IActionResult> GetAll(int? pageNumber, int? pageSize, string sortField, string sortOrder, string searchText, long? orgId)
+        public async Task<IActionResult> GetAll(long? orgId)
         {
-            return Ok(await _userService.GetAllAsync(pageNumber ?? 1, pageSize ?? 10, sortField ?? "UserName", sortOrder ?? "ASC", searchText ?? "", orgId));
+            return Ok(await _userService.GetAll(orgId));
+        }
+
+        [HttpGet("GetById/{userId}")]
+        public async Task<IActionResult> GetUserById(long userId)
+        {
+            return Ok(await _userService.GetUserById(userId));
+        }
+
+
+        [HttpPost("CreateUser")]
+        public async Task<IActionResult> CreateUser(UserDto user)
+        {
+            return Ok(await _userService.CreateUser(user));
+        }
+
+        [HttpPut("UpdateUser")]
+        public async Task<IActionResult> UpdateUser(UserDto user)
+        {
+            return Ok(await _userService.UpdateUserAsync(user));
         }
 
         [HttpPost("Login")]

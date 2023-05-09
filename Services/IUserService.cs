@@ -15,6 +15,8 @@ namespace SmartSence.Services
         Task<PaginatedResult<UserDto>> GetAllAsync(int pageNumber, int pageSize, string sortField,
             string sortOrder, string searchText, long? orgId);
 
+        Task<IResult<List<UserDto>>> GetAll(long? orgId);
+
         Task<IResult> ChangePasswordAsync(ChangePasswordRequest model);
 
         Task<IResult> RegisterAsync(RegisterModel request, string origin);
@@ -23,6 +25,9 @@ namespace SmartSence.Services
         Task<Result<TokenResponse>> Login(LoginModel model);
 
         Task<Result<DashboardSummary>> GetUserSummary(DashboardFilter filter);
+        Task<Result<UserDto>> GetUserById(long userId);
+        Task<IResult<long>> CreateUser(UserDto request);
+        Task<IResult> UpdateUserAsync(UserDto request)
 
 
         //Task<IResult<UserResponse>> GetAsync(string userId);
