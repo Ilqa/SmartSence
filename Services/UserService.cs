@@ -250,7 +250,7 @@ namespace SmartSence.Services
         {
             if (!string.IsNullOrWhiteSpace(request.PhoneNumber))
             {
-                var userWithSamePhoneNumber = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == request.PhoneNumber && x.Id != userId);
+                var userWithSamePhoneNumber = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == request.PhoneNumber && x.Id != request.Id);
                 if (userWithSamePhoneNumber != null)
                     return await Result.FailAsync(string.Format("Phone number {0} is already used.",
                         request.PhoneNumber));

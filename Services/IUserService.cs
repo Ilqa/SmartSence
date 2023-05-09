@@ -27,7 +27,7 @@ namespace SmartSence.Services
         Task<Result<DashboardSummary>> GetUserSummary(DashboardFilter filter);
         Task<Result<UserDto>> GetUserById(long userId);
         Task<IResult<long>> CreateUser(UserDto request);
-        Task<IResult> UpdateUserAsync(UserDto request)
+        Task<IResult> UpdateUserAsync(UserDto request);
 
 
         //Task<IResult<UserResponse>> GetAsync(string userId);
