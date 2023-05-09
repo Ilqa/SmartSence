@@ -26,5 +26,6 @@ namespace SmartSence.Services
         Task<Result<List<DeviceTypeDto>>> GetAllDeviceTypes();
 
         Task<Result<DeviceTypeDto>> GetDeviceTypeById(long id);
+        Task<IResult> DeleteDeviceType(long id);
     }
 }

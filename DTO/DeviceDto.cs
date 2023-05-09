@@ -28,9 +28,13 @@ namespace SmartSence.DTO
         //[JsonConverter(typeof(StringEnumConverter))]
         public StatusEnum Status { get; set; }
 
-        public long? BuildingFloorId { get; set; }
-
+       
         public long? Orgid { get; set; }
+        public long? SectorId { get; set; }
+        public long? BlockId { get; set; }
+        public long? BuildingId { get; set; }
+        public long? BuildingFloorId { get; set; }
+        public long? RoomId { get; set; }
         
     }
 }

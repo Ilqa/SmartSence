@@ -158,5 +158,17 @@ namespace SmartSence.Services
             var devicetypes = await _deviceTypeRepo.Entities.FirstOrDefaultAsync(s => s.Id == id);
             return await Result<DeviceTypeDto>.SuccessAsync(_mapper.Map<DeviceTypeDto>(devicetypes));
         }
+
+        public async Task<Wrappers.IResult> DeleteDeviceType(long id)
+        {
+            var deviceType = await _deviceTypeRepo.GetByIdAsync(id);
+            if (deviceType == null)
+                return Result<long>.Fail("Device Type not Found");
+
+            deviceType.IsDeleted = true;
+            await _deviceTypeRepo.UpdateAsync(deviceType);
+            await _unitOfWork.Commit();
+            return Result<long>.Success(deviceType.Id, "Device Type deleted successfully");
+        }
     }
 }

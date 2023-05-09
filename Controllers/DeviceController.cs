@@ -66,5 +66,7 @@ namespace SmartSence.Controllers
         [HttpGet("DeviceTypeById/{id}")]
         public async Task<IActionResult> GetDeviceTypeById(long id) => Ok(await _deviceService.GetDeviceTypeById(id));
 
+        [HttpPut("DeleteDeviceType")]
+        public async Task<IActionResult> DeleteDeviceType(long id) => Ok(await _deviceService.DeleteDeviceType(id));
     }
 }
