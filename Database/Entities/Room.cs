@@ -21,7 +21,7 @@ namespace SmartSence.Database.Entities
         [ForeignKey(nameof(BuildingFloorId))]
         public BuildingFloor BuildingFloor { get; set; }
 
-        public virtual ICollection<Device> DeviceInfos { get; } = new List<Device>();
+        public virtual ICollection<Device> Devices { get; } = new List<Device>();
 
         public bool IsDeleted { get; set; }
     }

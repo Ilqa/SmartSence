@@ -10,6 +10,7 @@ namespace JobHunt.Mappings
         public RoomProfile()
         {
             CreateMap<RoomDto, Room>().ReverseMap();
+            CreateMap<LiteEntityDto, Room>().ReverseMap();
         }
     }
 }

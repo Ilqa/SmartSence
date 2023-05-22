@@ -9,7 +9,7 @@ namespace SmartSence.DTO
         public string Description { get; set; }
         public string Image { get; set; }
         public FloorEnum FloorEnum { get; set; }
-        public string Coordinates { get; set; }
+        //public string Coordinates { get; set; }
         public long BuildingId { get; set; }
         public long Blockid { get; set; }
         public long OrgId { get; set; }

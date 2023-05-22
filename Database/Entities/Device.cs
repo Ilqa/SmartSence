@@ -30,7 +30,7 @@ public partial class Device
     public long? SectorId { get; set; }
     public long? BlockId { get; set; }
     public long? BuildingId { get; set; }
-
+    
     public long? BuildingFloorId { get; set; }
     public long? RoomId { get; set; }
 

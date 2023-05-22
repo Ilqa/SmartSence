@@ -23,7 +23,7 @@ public partial class Sector
 
    // public string Noofdevices { get; set; } = null!;
 
-    public string Networkdescription { get; set; } = null!;
+   // public string Networkdescription { get; set; } = null!;
 
     public virtual ICollection<Block> Blocks { get; } = new List<Block>();
 

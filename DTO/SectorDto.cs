@@ -16,10 +16,10 @@
 
         public string Coordinates { get; set; } = null!;
 
-        public string Noofgateways { get; set; } = null!;
+       // public string Noofgateways { get; set; } = null!;
 
-        public string Noofdevices { get; set; } = null!;
+        //public string Noofdevices { get; set; } = null!;
 
-        public string Networkdescription { get; set; } = null!;
+       // public string Networkdescription { get; set; } = null!;
     }
 }

@@ -55,8 +55,8 @@ namespace SmartSence.Services
         public async Task<PaginatedResult<OrganizationDto>> GetAllAsync(int pageNumber, int pageSize, string sortField, string sortOrder, string searchText)
         {           
             var filteredOrgs = searchText.IsNullOrEmpty()
-                ? _organizationRepository.Entities
-                : _organizationRepository.Entities.Where(p => p.Name.Contains(searchText));
+                ? _organizationRepository.Entities.Where( s=> !s.IsDeleted)
+                : _organizationRepository.Entities.Where(p => !p.IsDeleted && p.Name.Contains(searchText));
 
             var sortedOrgs = filteredOrgs.OrderBy($"{sortField} {sortOrder}");
             
@@ -94,7 +94,7 @@ namespace SmartSence.Services
 
         public async Task<Wrappers.IResult> DeleteOrganization(long id)
         {
-            var OrgDB = await _organizationRepository.Entities.FirstOrDefaultAsync(s => s.Id == id);
+            var OrgDB = await _organizationRepository.Entities.FirstOrDefaultAsync(s => !s.IsDeleted && s.Id == id);
             if (OrgDB == null)
                 return Result<long>.Fail($"Organization Not Found.");
 
@@ -107,7 +107,7 @@ namespace SmartSence.Services
         public async Task<Wrappers.Result<List<LiteEntityDto>>> GetAllSectorsLite(long orgId)
         {
             var orgs = await _sectorRepository.GetAllAsync();
-            orgs = orgs.Where(s => s.Orgid == orgId).ToList();
+            orgs = orgs.Where(s => !s.IsDeleted && s.Orgid == orgId).ToList();
             return await Result<List<LiteEntityDto>>.SuccessAsync(_mapper.Map<List<LiteEntityDto>>(orgs));
         }
         public async Task<Result<OrganizationDto>> GetOrganizationById(long id)
@@ -129,7 +129,7 @@ namespace SmartSence.Services
 
         public async Task<Wrappers.IResult> UpdateSector(SectorDto sector)
         {
-            var sectorDb = await _sectorRepository.Entities.FirstOrDefaultAsync(s => s.Id == sector.Id);
+            var sectorDb = await _sectorRepository.Entities.FirstOrDefaultAsync(s => !s.IsDeleted && s.Id == sector.Id);
             if (sectorDb == null)
                 return Result<long>.Fail($"Sector Not Found.");
 
@@ -158,13 +158,13 @@ namespace SmartSence.Services
 
         public async Task<Result<List<SectorDto>>> GetAllSectors(long orgId)
         {
-            var sectors = await _sectorRepository.Entities.Where(s => s.Orgid== orgId).ToListAsync();
+            var sectors = await _sectorRepository.Entities.Where(s => !s.IsDeleted && s.Orgid== orgId).ToListAsync();
             return await Result<List<SectorDto>>.SuccessAsync(_mapper.Map<List<SectorDto>>(sectors));
         }
 
         public async Task<Result<List<SectorDto>>> GetAllSectors()
         {
-            var sectors = await _sectorRepository.Entities.ToListAsync();
+            var sectors = await _sectorRepository.Entities.Where(s => !s.IsDeleted).ToListAsync();
             return await Result<List<SectorDto>>.SuccessAsync(_mapper.Map<List<SectorDto>>(sectors));
         }
         public async Task<Result<SectorDto>> GetSectorById(long id)
@@ -188,7 +188,7 @@ namespace SmartSence.Services
 
         public async Task<Wrappers.IResult> UpdateBlock(BlockDto block)
         {
-            var blockDb = await _blockRepository.Entities.FirstOrDefaultAsync(s => s.Id == block.Id);
+            var blockDb = await _blockRepository.Entities.FirstOrDefaultAsync(s => !s.IsDeleted && s.Id == block.Id);
             if (blockDb == null)
                 return Result<long>.Fail($"Block Not Found.");
 
@@ -215,20 +215,20 @@ namespace SmartSence.Services
 
         public async Task<Result<List<BlockDto>>> GetAllBlocks(long sectorId)
         {
-            var blocks = await _blockRepository.Entities.Where(s => s.Sectorid == sectorId).ToListAsync();
+            var blocks = await _blockRepository.Entities.Where(s => !s.IsDeleted && s.Sectorid == sectorId).ToListAsync();
             return await Result<List<BlockDto>>.SuccessAsync(_mapper.Map<List<BlockDto>>(blocks));
         }
 
         public async Task<Result<List<BlockDto>>> GetAllBlocks()
         {
-            var blocks = await _blockRepository.Entities.ToListAsync();
+            var blocks = await _blockRepository.Entities.Where(s => !s.IsDeleted).ToListAsync();
             return await Result<List<BlockDto>>.SuccessAsync(_mapper.Map<List<BlockDto>>(blocks));
         }
 
         public async Task<Wrappers.Result<List<LiteEntityDto>>> GetAllBlocksLite(long sectorId)
         {
             var orgs = await _blockRepository.GetAllAsync();
-            orgs = orgs.Where(s => s.Sectorid == sectorId).ToList();
+            orgs = orgs.Where(s => !s.IsDeleted && s.Sectorid == sectorId).ToList();
             return await Result<List<LiteEntityDto>>.SuccessAsync(_mapper.Map<List<LiteEntityDto>>(orgs));
         }
         public async Task<Result<BlockDto>> GetBlockById(long id)
@@ -251,7 +251,7 @@ namespace SmartSence.Services
 
         public async Task<Wrappers.IResult> UpdateBuilding(BuildingDto building)
         {
-            var houseDb = await _buildingRepository.Entities.FirstOrDefaultAsync(s => s.Id == building.Id);
+            var houseDb = await _buildingRepository.Entities.FirstOrDefaultAsync(s => !s.IsDeleted && s.Id == building.Id);
             if (houseDb == null)
                 return Result<long>.Fail($"Building Not Found.");
 
@@ -278,7 +278,7 @@ namespace SmartSence.Services
 
         public async Task<Result<List<BuildingDto>>> GetAllBuildings(long blockId)
         {
-            var house = await _buildingRepository.Entities.Where(s => s.Blockid == blockId).ToListAsync();
+            var house = await _buildingRepository.Entities.Where(s => !s.IsDeleted && s.Blockid == blockId).ToListAsync();
             return await Result<List<BuildingDto>>.SuccessAsync(_mapper.Map<List<BuildingDto>>(house));
         }
 
@@ -291,7 +291,7 @@ namespace SmartSence.Services
         public async Task<Result<List<LiteEntityDto>>> GetAllBuildingsLite(long blockId)
         {
             var orgs = await _buildingRepository.GetAllAsync();
-            orgs = orgs.Where(s => s.Blockid == blockId).ToList();
+            orgs = orgs.Where(s => !s.IsDeleted && s.Blockid == blockId).ToList();
             return await Result<List<LiteEntityDto>>.SuccessAsync(_mapper.Map<List<LiteEntityDto>>(orgs));
         }
 
@@ -315,7 +315,7 @@ namespace SmartSence.Services
 
         public async Task<Wrappers.IResult> UpdateBuildingFloor(BuildingFloorDto floor)
         {
-            var floorDb = await _buildingFloorRepository.Entities.FirstOrDefaultAsync(s => s.Id == floor.Id);
+            var floorDb = await _buildingFloorRepository.Entities.FirstOrDefaultAsync(s => !s.IsDeleted && s.Id == floor.Id);
             if (floorDb == null)
                 return Result<long>.Fail($"Floor Not Found.");
 
@@ -342,20 +342,20 @@ namespace SmartSence.Services
 
         public async  Task<Result<List<BuildingFloorDto>>> GetAllBuildingFloors(long buildingId)
         {
-            var buildingFloors = await _buildingFloorRepository.Entities.Where(s => s.BuildingId == buildingId).ToListAsync();
+            var buildingFloors = await _buildingFloorRepository.Entities.Where(s => !s.IsDeleted && s.BuildingId == buildingId).ToListAsync();
             return await Result<List<BuildingFloorDto>>.SuccessAsync(_mapper.Map<List<BuildingFloorDto>>(buildingFloors));
         }
 
         public async Task<Result<List<BuildingFloorDto>>> GetAllBuildingFloors()
         {
-            var buildingFloors = await _buildingFloorRepository.Entities.ToListAsync();
+            var buildingFloors = await _buildingFloorRepository.Entities.Where(s => !s.IsDeleted).ToListAsync();
             return await Result<List<BuildingFloorDto>>.SuccessAsync(_mapper.Map<List<BuildingFloorDto>>(buildingFloors));
         }
 
         public async Task<Result<List<LiteEntityDto>>> GetAllFloorsLite(long buildingId)
         {
             var orgs = await _buildingFloorRepository.GetAllAsync();
-            orgs = orgs.Where(s => s.BuildingId == buildingId).ToList();
+            orgs = orgs.Where(s => !s.IsDeleted && s.BuildingId == buildingId).ToList();
             return await Result<List<LiteEntityDto>>.SuccessAsync(_mapper.Map<List<LiteEntityDto>>(orgs));
         }
 
@@ -380,7 +380,7 @@ namespace SmartSence.Services
 
         public async Task<Wrappers.IResult> UpdateRoom(RoomDto room)
         {
-            var roomDb = await _roomRepository.Entities.FirstOrDefaultAsync(s => s.Id == room.Id);
+            var roomDb = await _roomRepository.Entities.FirstOrDefaultAsync(s => !s.IsDeleted && s.Id == room.Id);
             if (roomDb == null)
                 return Result<long>.Fail($"room Not Found.");
 
@@ -404,19 +404,19 @@ namespace SmartSence.Services
 
         public async Task<Result<List<RoomDto>>> GetAllRooms(long floorId)
         {
-            var blocks = await _roomRepository.Entities.Where(s => s.BuildingFloorId == floorId).ToListAsync();
+            var blocks = await _roomRepository.Entities.Where(s => !s.IsDeleted && s.BuildingFloorId == floorId).ToListAsync();
             return await Result<List<RoomDto>>.SuccessAsync(_mapper.Map<List<RoomDto>>(blocks));
         }
 
         public async Task<Result<List<RoomDto>>> GetAllRooms()
         {
-            var blocks = await _roomRepository.Entities.ToListAsync();
+            var blocks = await _roomRepository.Entities.Where(s => !s.IsDeleted).ToListAsync();
             return await Result<List<RoomDto>>.SuccessAsync(_mapper.Map<List<RoomDto>>(blocks));
         }
 
         public async Task<Result<RoomDto>> GetRoomById(long id)
         {
-            var org = await _roomRepository.Entities.FirstOrDefaultAsync(s => s.Id == id);
+            var org = await _roomRepository.Entities.FirstOrDefaultAsync(s => !s.IsDeleted && s.Id == id);
             if (org == null)
                 return await Result<RoomDto>.FailAsync("Organization not found");
             return await Result<RoomDto>.SuccessAsync(_mapper.Map<RoomDto>(org));
@@ -425,7 +425,7 @@ namespace SmartSence.Services
         public async Task<Result<List<LiteEntityDto>>> GetAllRoomsLite(long floorId)
         {
             var rooms = await _roomRepository.GetAllAsync();
-            rooms = rooms.Where(s => s.BuildingFloorId == floorId).ToList();
+            rooms = rooms.Where(s => !s.IsDeleted && s.BuildingFloorId == floorId).ToList();
             return await Result<List<LiteEntityDto>>.SuccessAsync(_mapper.Map<List<LiteEntityDto>>(rooms));
         }
 

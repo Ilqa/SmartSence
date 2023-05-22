@@ -18,7 +18,7 @@ namespace SmartSence.Database.Entities
 
         [ForeignKey(nameof(BuildingId))]
         public Building Building { get; set; }
-        public string Coordinates { get; set; }
+        //public string Coordinates { get; set; }
         public bool IsDeleted { get; set; }
 
         // public virtual ICollection<DeviceInfo> DeviceInfos { get; } = new List<DeviceInfo>();

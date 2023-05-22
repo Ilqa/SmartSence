@@ -52,19 +52,19 @@ namespace SmartSence.Services
 
         public async Task<Result<List<DeviceDto>>> GetDevicesByFloor(long id)
         {
-            var devices = await _repositoryAsync.Entities.Where(s => s.RoomId == id).ToListAsync();
+            var devices = await _repositoryAsync.Entities.Where(s => !s.IsDeleted && s.RoomId == id).ToListAsync();
             return await Result<List<DeviceDto>>.SuccessAsync(_mapper.Map<List<DeviceDto>>(devices));
         }
 
         public async Task<Result<List<DeviceDto>>> GetDevicesByBuilding(long id)
         {
-            var devices = await _repositoryAsync.Entities.Where(s => s.Room.BuildingFloor.BuildingId == id).ToListAsync();
+            var devices = await _repositoryAsync.Entities.Where(s => !s.IsDeleted && s.Room.BuildingFloor.BuildingId == id).ToListAsync();
             return await Result<List<DeviceDto>>.SuccessAsync(_mapper.Map<List<DeviceDto>>(devices));
         }
 
         public async Task<Result<List<DeviceDto>>> GetDevicesByOrganization(long id)
         {
-            var devices = await _repositoryAsync.Entities.Where(s => s.Orgid == id).ToListAsync();
+            var devices = await _repositoryAsync.Entities.Where(s => !s.IsDeleted && s.Orgid == id).ToListAsync();
             return await Result<List<DeviceDto>>.SuccessAsync(_mapper.Map<List<DeviceDto>>(devices));
         }
 
@@ -90,7 +90,7 @@ namespace SmartSence.Services
 
         public async Task<Wrappers.IResult> UpdateDevice(DeviceDto device)
         {
-            var deviceDb = await _repositoryAsync.Entities.FirstOrDefaultAsync(s => s.Id == device.Id);
+            var deviceDb = await _repositoryAsync.Entities.FirstOrDefaultAsync(s => !s.IsDeleted && s.Id == device.Id);
             if (deviceDb == null)
                 return Result<long>.Fail($"Device Not Found.");
 
@@ -136,7 +136,7 @@ namespace SmartSence.Services
 
         public async Task<Result<List<DeviceDto>>> GetAllDevices()
         {
-            var devices = await _repositoryAsync.Entities.ToListAsync();
+            var devices = await _repositoryAsync.Entities.Where(s => !s.IsDeleted).ToListAsync();
             return await Result<List<DeviceDto>>.SuccessAsync(_mapper.Map<List<DeviceDto>>(devices));
         }
 
@@ -148,7 +148,7 @@ namespace SmartSence.Services
 
         public async Task<Result<List<DeviceTypeDto>>> GetAllDeviceTypes()
         {
-            var devicetypes = await _deviceTypeRepo.Entities.ToListAsync();
+            var devicetypes = await _deviceTypeRepo.Entities.Where(s => !s.IsDeleted).ToListAsync();
             return await Result<List<DeviceTypeDto>>.SuccessAsync(_mapper.Map<List<DeviceTypeDto>>(devicetypes));
 
         }
