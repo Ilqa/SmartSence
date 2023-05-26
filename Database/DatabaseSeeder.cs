@@ -75,6 +75,7 @@ namespace SmartSence.Database
                     PhoneNumberConfirmed = true,
                     IsActive = true,
                     OrganizationId = null,
+                   //s Image = null,
 
                 };
                 var superUserInDb = await _userManager.FindByEmailAsync(superUser.Email);

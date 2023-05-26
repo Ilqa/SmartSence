@@ -148,14 +148,14 @@ namespace SmartSence.Services
 
         public async Task<Result<List<DeviceTypeDto>>> GetAllDeviceTypes()
         {
-            var devicetypes = await _deviceTypeRepo.Entities.Where(s => !s.IsDeleted).ToListAsync();
+            var devicetypes = await _deviceTypeRepo.Entities.Include(t => t.DeviceTypeColumns).Where(s => !s.IsDeleted).ToListAsync();
             return await Result<List<DeviceTypeDto>>.SuccessAsync(_mapper.Map<List<DeviceTypeDto>>(devicetypes));
 
         }
 
         public async Task<Result<DeviceTypeDto>> GetDeviceTypeById(long id)
         {
-            var devicetypes = await _deviceTypeRepo.Entities.FirstOrDefaultAsync(s => s.Id == id);
+            var devicetypes = await _deviceTypeRepo.Entities.Include(t => t.DeviceTypeColumns).FirstOrDefaultAsync(s => s.Id == id);
             return await Result<DeviceTypeDto>.SuccessAsync(_mapper.Map<DeviceTypeDto>(devicetypes));
         }
 

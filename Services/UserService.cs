@@ -67,7 +67,7 @@ namespace SmartSence.Services
             var user = await _userManager.Users.Where(u => u.Id == AuthenticatedUserID).FirstOrDefaultAsync();
             var result = _mapper.Map<UserDto>(user);
             result.Role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            result.UserPermissions = AuthenticatedUserClaims.Where(c => c.Key == "Permission").Select(c => c.Value).ToList();
+           // result.UserPermissions = AuthenticatedUserClaims.Where(c => c.Key == "Permission").Select(c => c.Value).ToList();
             return result;
         }
 
@@ -242,7 +242,7 @@ namespace SmartSence.Services
             var user = await _userManager.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
             var result = _mapper.Map<UserDto>(user);
             result.Role = _userManager.GetRolesAsync(user).Result.ToList().FirstOrDefault();
-            result.UserPermissions = AuthenticatedUserClaims.Where(c => c.Key == "Permission").Select(c => c.Value).ToList();
+            //result.UserPermissions = AuthenticatedUserClaims.Where(c => c.Key == "Permission").Select(c => c.Value).ToList();
             return await Result<UserDto>.SuccessAsync(result);
         }
 
@@ -317,9 +317,10 @@ namespace SmartSence.Services
                 Email = request.Email,
                 UserName = request.UserName,
                 PhoneNumber = request.PhoneNumber,
-                //Address = request.Address
-                //FirstName = request.FirstName,
-                //LastName = request.LastName
+                Address = request.Address,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                PasswordHash = request.PasswordHash,
             };
 
             if (!string.IsNullOrWhiteSpace(request.PhoneNumber))
